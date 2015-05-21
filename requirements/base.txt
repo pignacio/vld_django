@@ -1,0 +1,8 @@
+Django==1.8.2
+bpython==0.14.1
+django-braces==1.8.0
+django-compressor==1.4
+django-crispy-forms==1.4.0
+django-extensions==1.5.5
+django-floppyforms==1.4.1
+django-toolbelt==0.0.1
