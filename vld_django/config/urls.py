@@ -21,8 +21,11 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
+import ingredient.urls
+
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='base.html'), name='home'),
+    url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
+    url(r'^ingredient/', include(ingredient.urls, namespace='ingredient')),
     url(r'^admin/', include(admin.site.urls)),
 ]  # yapf: disable
 

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Ingredientes" %}{% endblock title %}
+{% block page_title %}{% trans "Ingredientes" %}{% endblock page_title %}
+
+{% block page_buttons %}
+<a href="{% url "ingredient:create" %}" title="{% trans "Agregar ingrediente" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
+<a href="{% url "ingredient:import" %}" title="{% trans "Importar ingrediente" %}"><span class="glyphicon glyphicon-import icon-add"></span></a>
+{% endblock page_buttons %}
+
+{% block content %}
+
+{% if ingredient_list %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for ingredient in ingredient_list %}
+  <tr>
+    <td><a href="{% url "ingredient:detail" ingredient.id %}">{{ ingredient.name }}</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="jumbotron">{% trans "No hay ingredientes!" %}</div>
+{% endif %}
+{% endblock content %}
+
+{# vim: set ft=htmldjango :#}

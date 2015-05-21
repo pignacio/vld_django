@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Ingrediente - {{ ingredient.name }}{% endblock title %}
+{% block page_title %}Ingrediente - {{ ingredient.name }}{% endblock page_title %}
+
+{% block content %}
+Data:
+<pre>
+{{ ingredient.data }}
+</pre>
+{% endblock content %}
+{# vim: set ft=htmldjango :#}
