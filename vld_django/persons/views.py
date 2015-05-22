@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals, division
 
 import logging
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.views.generic import (ListView, DetailView, UpdateView,
                                   CreateView)
