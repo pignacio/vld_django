@@ -81,7 +81,6 @@ class MealAddSectionView(UpdateView):
         return redirect(self.object.get_absolute_url())
 
 
-
 class MealEditSectionView(UpdateView):
     model = Meal
     form_class = MealEditSectionForm
@@ -89,7 +88,7 @@ class MealEditSectionView(UpdateView):
 
     def get_context_data(self, *args, **kwargs):
         data = super(MealEditSectionView, self).get_context_data(*args,
-                                                                **kwargs)
+                                                                 **kwargs)
         data['path'] = self.kwargs['path']
         data['name'] = data['meal'].person.name
         #TODO(pignacio): Fix this strange lookup. meal.person.name does not
@@ -114,6 +113,3 @@ class MealEditSectionView(UpdateView):
         data['__init__'] = form.cleaned_data['ingredients']
         self.object.save()
         return redirect(self.object.get_absolute_url())
-
-
-

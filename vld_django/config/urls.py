@@ -22,11 +22,12 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
 import ingredient.urls
-import persons.urls
 import meals.urls
+import persons.urls
+import web.urls
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
+    url(r'^', include(web.urls, namespace='web')),
     url(r'^ingredient/', include(ingredient.urls, namespace='ingredient')),
     url(r'^persons/', include(persons.urls, namespace='persons')),
     url(r'^meals/', include(meals.urls, namespace='meals')),

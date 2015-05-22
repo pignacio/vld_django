@@ -326,3 +326,8 @@ INSTALLED_APPS += (
 ########## TEST RUNNER CONFIGURATION
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 ########## END TEST RUNNER CONFIGURATION
+
+
+########## LOGIN URL CONFIGURATION
+LOGIN_URL = 'web:login'
+########## ENDLOGIN URL CONFIGURATION
