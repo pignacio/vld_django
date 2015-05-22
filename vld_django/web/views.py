@@ -17,14 +17,8 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 def login(request):
     logger.debug("LOGIN")
     if request.method == 'POST':
-        logger.debug("POST: %s", request.POST)
         form = LoginForm(request.POST)
-        logger.debug("ISVALID: %s", form.is_valid())
-        logger.debug("dir: %s", dir(form))
-        logger.debug("err: %s", form.errors)
-        logger.debug("nferr: %s", form.non_field_errors)
         if form.is_valid():
-            logger.debug("ISVALID, next=%s", form.cleaned_data['next'])
             auth.login(request, form.cleaned_data['user'])
             return redirect(form.cleaned_data['next'])
     else:
