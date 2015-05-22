@@ -3,6 +3,9 @@
 # pylint: disable=wildcard-import,unused-wildcard-import
 from .base import *
 
+DEBUG = True
+TEMPLATE_DEBUG = True
+
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
 DATABASES['default'] = dj_database_url.config()
