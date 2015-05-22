@@ -32,17 +32,6 @@ TEMPLATE_DEBUG = DEBUG
 ########## END DEBUG CONFIGURATION
 
 
-########## MANAGER CONFIGURATION
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = (
-    ('Your Name', 'your_email@example.com'),
-)
-
-# See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
-MANAGERS = ADMINS
-########## END MANAGER CONFIGURATION
-
-
 ########## DATABASE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -248,7 +237,7 @@ LOGGING = {
 
 ########## WSGI CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = '%s.wsgi.application' % SITE_NAME
+WSGI_APPLICATION = 'config.wsgi.application'
 ########## END WSGI CONFIGURATION
 
 
