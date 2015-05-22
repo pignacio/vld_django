@@ -282,7 +282,7 @@ COMPRESS_JS_FILTERS = ()
 
 # See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_PRECOMPILERS
 COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'sass --scss {infile} {outfile}'),
+    ('text/x-scss', 'django_pyscss.compressor.DjangoScssFilter'),
 )
 
 # See: http://django-compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE_CONTEXT

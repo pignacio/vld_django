@@ -8,4 +8,5 @@ django-extensions==1.5.5
 django-floppyforms==1.4.1
 django-jsonfield==0.9.13
 django-toolbelt==0.0.1
+django-pyscss==2.0.2
 -e contrib/var-log-dieta
