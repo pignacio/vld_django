@@ -19,6 +19,23 @@ from .models import Meal
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
+class MealViewMixin(LoginRequiredMixin):
+    def get_object(self):
+        person = get_object_or_404(Person, name=self.kwargs['person_name'])
+        date = datetime.datetime.strptime(self.kwargs['date'],
+                                          '%Y-%m-%d').date()
+        try:
+            return Meal.objects.get(person=person, date=date)
+        except Meal.DoesNotExist:
+            return Meal(person=person, date=date, data={})
+
+    def get_context_data(self, *args, **kwargs):
+        res = super(MealViewMixin, self).get_context_data(*args, **kwargs)
+        res['next_meal_date'] = self.object.date + datetime.timedelta(1)
+        res['prev_meal_date'] = self.object.date - datetime.timedelta(1)
+        return res
+
+
 class MealCreateView(LoginRequiredMixin, CreateView):
     model = Meal
     template_name_suffix = '_create'
@@ -34,13 +51,8 @@ class MealCreateView(LoginRequiredMixin, CreateView):
         return self.object.get_success_url()
 
 
-class MealDetailView(LoginRequiredMixin, DetailView):
+class MealDetailView(MealViewMixin, DetailView):
     model = Meal
-
-    def get_object(self):
-        person = get_object_or_404(Person, name=self.kwargs['person_name'])
-        date = datetime.datetime.strptime(self.kwargs['date'], '%Y-%m-%d')
-        return get_object_or_404(Meal, person=person, date=date)
 
     def get_context_data(self, *args, **kwargs):
         data = super(MealDetailView, self).get_context_data(*args, **kwargs)
@@ -48,7 +60,7 @@ class MealDetailView(LoginRequiredMixin, DetailView):
         return data
 
 
-class MealAddSectionView(LoginRequiredMixin, UpdateView):
+class MealAddSectionView(MealViewMixin, UpdateView):
     model = Meal
     form_class = MealAddSectionForm
     template_name_suffix = '_add_section'
@@ -63,10 +75,6 @@ class MealAddSectionView(LoginRequiredMixin, UpdateView):
         logger.debug('DATA: %s', data)
         return data
 
-    def get_object(self):
-        return get_object_or_404(self.model,
-                                 person__name=self.kwargs['person_name'],
-                                 date=self.kwargs['date'])
 
     def form_valid(self, form):
         path = [p for p in self.kwargs['path'].split('.') if p]
@@ -82,7 +90,7 @@ class MealAddSectionView(LoginRequiredMixin, UpdateView):
         return redirect(self.object.get_absolute_url())
 
 
-class MealEditSectionView(LoginRequiredMixin, UpdateView):
+class MealEditSectionView(MealViewMixin, UpdateView):
     model = Meal
     form_class = MealEditSectionForm
     template_name_suffix = '_edit_section'
@@ -92,8 +100,8 @@ class MealEditSectionView(LoginRequiredMixin, UpdateView):
                                                                  **kwargs)
         data['path'] = self.kwargs['path']
         data['name'] = data['meal'].person.name
-        #TODO(pignacio): Fix this strange lookup. meal.person.name does not
-        # show on the template
+        # TODO(pignacio): Fix this strange lookup. meal.person.name does not
+        #     show on the template
         logger.debug('DATA: %s', data)
         return data
 
@@ -109,11 +117,6 @@ class MealEditSectionView(LoginRequiredMixin, UpdateView):
                 data = data[name]
         res['ingredients'] = data.get('__init__', [])
         return res
-
-    def get_object(self):
-        return get_object_or_404(self.model,
-                                 person__name=self.kwargs['person_name'],
-                                 date=self.kwargs['date'])
 
     def form_valid(self, form):
         path = [p for p in self.kwargs['path'].split('.') if p]

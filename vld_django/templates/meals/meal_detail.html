@@ -4,9 +4,12 @@
 {% block title %}Comida - {{ meal.person.name }} - {{ meal.date }}{% endblock title %}
 {% block page_title %}Comida - {{ meal.person.name }} - {{ meal.date }}{% endblock page_title %}
 
+{% block page_buttons %}
+<a href="{% url "meals:detail" meal.person prev_meal_date %}" title="{% trans "Comida anterior" %}"><span class="glyphicon glyphicon-arrow-left icon-add"></span></a>
+<a href="{% url "meals:detail" meal.person next_meal_date %}" title="{% trans "Comida anterior" %}"><span class="glyphicon glyphicon-arrow-right icon-add"></span></a>
+{% endblock page_buttons %}
+
 {% block content %}
-
-
 <table class="table">
   <thead>
     <tr>
