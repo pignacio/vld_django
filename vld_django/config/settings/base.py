@@ -292,7 +292,7 @@ COMPRESS_OFFLINE_CONTEXT = {
 }
 
 # See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
-COMPRESS_OFFLINE = True
+COMPRESS_OFFLINE = False
 ########## END COMPRESSOR CONFIGURATION
 
 
