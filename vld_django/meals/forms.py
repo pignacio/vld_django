@@ -60,7 +60,7 @@ class MealEditSectionForm(forms.Form):
 
     def __init__(self, instance, ingredients, *args, **kwargs):
         initial = kwargs.pop('initial', {})
-        initial['ingredients'] = ''.join(ingredients)
+        initial['ingredients'] = '\n'.join(i.strip() for i in ingredients)
         super(MealEditSectionForm, self).__init__(*args,
                                                   initial=initial, **kwargs)
         self.helper = FormHelper()
