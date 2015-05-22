@@ -1,4 +1,4 @@
-{% load staticfiles i18n %}
+{% load staticfiles i18n utils_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,7 +40,15 @@ body {
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="{% url "web:home" %}">Home</a></li>
+        <li class="{% active_page request "home" %}">
+        <a href="{% url "web:home" %}">Home</a>
+        </li>
+        <li class="{% active_namespace request "ingredient" %}">
+        <a href="{% url "ingredient:list" %}">{% trans "Ingredientes" %}</a>
+        </li>
+        <li class="{% active_namespace request "persons" %}">
+        <a href="{% url "persons:list" %}">{% trans "Personas" %}</a>
+        </li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
