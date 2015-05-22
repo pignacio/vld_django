@@ -97,6 +97,19 @@ class MealEditSectionView(LoginRequiredMixin, UpdateView):
         logger.debug('DATA: %s', data)
         return data
 
+    def get_form_kwargs(self, *args, **kwargs):
+        res = super(MealEditSectionView, self).get_form_kwargs(*args, **kwargs)
+        path = [p for p in self.kwargs['path'].split('.') if p]
+        data = self.object.data
+        for name in path:
+            try:
+                data = data[name]
+            except KeyError:
+                data[name] = {}
+                data = data[name]
+        res['ingredients'] = data['__init__']
+        return res
+
     def get_object(self):
         return get_object_or_404(self.model,
                                  person__name=self.kwargs['person_name'],

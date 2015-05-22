@@ -58,8 +58,11 @@ class MealAddSectionForm(forms.Form):
 class MealEditSectionForm(forms.Form):
     ingredients = forms.CharField(widget=forms.Textarea())
 
-    def __init__(self, instance, *args, **kwargs):
-        super(MealEditSectionForm, self).__init__(*args, **kwargs)
+    def __init__(self, instance, ingredients, *args, **kwargs):
+        initial = kwargs.pop('initial', {})
+        initial['ingredients'] = ''.join(ingredients)
+        super(MealEditSectionForm, self).__init__(*args,
+                                                  initial=initial, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'ingredients',
