@@ -252,50 +252,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 ########## END CRISPY FORMS CONFIGURATION
 
 
-########## COMPRESSOR CONFIGURATION
-# See: http://django-compressor.readthedocs.org/en/latest/quickstart/#installation
-INSTALLED_APPS += (
-    # Assets manager for CSS and JS:
-    'compressor',
-)
-
-# See: http://django_compressor.readthedocs.org/en/latest/quickstart/#installation
-STATICFILES_FINDERS += ('compressor.finders.CompressorFinder',)
-
-# See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_ENABLED
-COMPRESS_ENABLED = True
-
-# See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_CSS_FILTERS
-COMPRESS_CSS_FILTERS = (
-    'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.datauri.CssDataUriFilter',
-)
-
-# See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_CSS_HASHING_METHOD
-COMPRESS_CSS_HASHING_METHOD = 'content'
-
-# See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_DATA_URI_MAX_SIZE
-COMPRESS_DATA_URI_MAX_SIZE = 64 * 1024
-
-# See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_JS_FILTERS
-COMPRESS_JS_FILTERS = ()
-
-# See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_PRECOMPILERS
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_pyscss.compressor.DjangoScssFilter'),
-)
-
-# See: http://django-compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE_CONTEXT
-COMPRESS_OFFLINE_CONTEXT = {
-    # Google Analytics:
-    'GA_TRACKING_ID': 'UA-XXXXXXXX-X',
-}
-
-# See: http://django_compressor.readthedocs.org/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
-COMPRESS_OFFLINE = False
-########## END COMPRESSOR CONFIGURATION
-
-
 ########## FLOPPYFORMS CONFIGURATION
 # See: http://django-floppyforms.readthedocs.org/en/latest/#installation
 INSTALLED_APPS += (

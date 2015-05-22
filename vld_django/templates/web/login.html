@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load compress staticfiles i18n %}
+{% load staticfiles i18n %}
 
 {% block title %}{% trans 'Login' %}{% endblock title %}
 {% block page_title %}{% trans 'Login' %}{% endblock page_title %}
@@ -8,7 +8,6 @@
 {% block _navbar %}{% endblock _navbar %}
 
 {% block extra_css %}
-{% compress css %}
 <style>
 .form-signin
 {
@@ -77,7 +76,6 @@
   border-radius: 50%;
 }
 </style>
-{% endcompress %}
 {% endblock extra_css %}
 
 {% block content %}

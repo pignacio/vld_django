@@ -1,1 +1,15 @@
-/*! project specific CSS goes here. */
+.log-level-0 {
+  background-color: #226622;
+}
+.log-level-1 {
+  background-color: #446622;
+}
+.log-level-2 {
+  background-color: #444422;
+}
+.log-level-3 {
+  background-color: #664422;
+}
+.log-level-4 {
+  background-color: #662222;
+}
