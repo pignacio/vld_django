@@ -11,6 +11,8 @@ from django.views.generic import ListView, CreateView, DetailView, FormView
 
 from var_log_dieta.objects import Ingredient as VldIngredient
 
+
+from utils.views import LoginRequiredMixin
 from .forms import (IngredientForm, IngredientImportForm,
                     IngredientMassImportForm)
 from .models import Ingredient
@@ -20,11 +22,11 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 # Create your views here.
 
 
-class IngredientListView(ListView):
+class IngredientListView(LoginRequiredMixin, ListView):
     model = Ingredient
 
 
-class IngredientImportView(CreateView):
+class IngredientImportView(LoginRequiredMixin, CreateView):
     model = Ingredient
     form_class = IngredientImportForm
     template_name = 'ingredient/ingredient_import.html'
@@ -34,7 +36,7 @@ class IngredientImportView(CreateView):
                        ingredient_id=self.object.id)
 
 
-class IngredientCreateView(CreateView):
+class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
     form_class = IngredientForm
     template_name = 'ingredient/ingredient_create.html'
@@ -44,12 +46,12 @@ class IngredientCreateView(CreateView):
                        kwargs={'ingredient_id': self.object.id})
 
 
-class IngredientDetailView(DetailView):
+class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     pk_url_kwarg = 'ingredient_id'
 
 
-class IngredientMassImportView(FormView):
+class IngredientMassImportView(LoginRequiredMixin, FormView):
     form_class = IngredientMassImportForm
     template_name = 'ingredient/ingredient_import.html'
 

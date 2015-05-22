@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import (ListView, DetailView, RedirectView,
                                   CreateView, UpdateView)
 
+from utils.views import LoginRequiredMixin
 from persons.models import Person
 from .forms import MealCreateForm, MealAddSectionForm, MealEditSectionForm
 from .helper import process_meal_data
@@ -18,7 +19,7 @@ from .models import Meal
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
-class MealCreateView(CreateView):
+class MealCreateView(LoginRequiredMixin, CreateView):
     model = Meal
     template_name_suffix = '_create'
     form_class = MealCreateForm
@@ -33,7 +34,7 @@ class MealCreateView(CreateView):
         return self.object.get_success_url()
 
 
-class MealDetailView(DetailView):
+class MealDetailView(LoginRequiredMixin, DetailView):
     model = Meal
 
     def get_object(self):
@@ -47,7 +48,7 @@ class MealDetailView(DetailView):
         return data
 
 
-class MealAddSectionView(UpdateView):
+class MealAddSectionView(LoginRequiredMixin, UpdateView):
     model = Meal
     form_class = MealAddSectionForm
     template_name_suffix = '_add_section'
@@ -81,7 +82,7 @@ class MealAddSectionView(UpdateView):
         return redirect(self.object.get_absolute_url())
 
 
-class MealEditSectionView(UpdateView):
+class MealEditSectionView(LoginRequiredMixin, UpdateView):
     model = Meal
     form_class = MealEditSectionForm
     template_name_suffix = '_edit_section'

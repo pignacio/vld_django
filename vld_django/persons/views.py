@@ -9,12 +9,13 @@ from django.core.urlresolvers import reverse
 from django.views.generic import (ListView, DetailView, RedirectView,
                                   CreateView)
 
+from utils.views import LoginRequiredMixin
 from .models import Person
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
-class PersonCreateView(CreateView):
+class PersonCreateView(LoginRequiredMixin, CreateView):
     model = Person
     fields = ('name', )
     template_name = 'persons/person_create.html'
@@ -24,10 +25,10 @@ class PersonCreateView(CreateView):
                        kwargs={'person_name': self.object.name})
 
 
-class PersonDetailView(DetailView):
+class PersonDetailView(LoginRequiredMixin, DetailView):
     model = Person
     pk_url_kwarg = 'person_name'
 
 
-class PersonListView(ListView):
+class PersonListView(LoginRequiredMixin, ListView):
     model = Person
