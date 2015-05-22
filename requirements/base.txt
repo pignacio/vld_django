@@ -6,3 +6,4 @@ django-crispy-forms==1.4.0
 django-extensions==1.5.5
 django-floppyforms==1.4.1
 django-toolbelt==0.0.1
+-e contrib/var-log-dieta
