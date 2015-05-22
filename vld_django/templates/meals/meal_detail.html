@@ -22,6 +22,9 @@
   {% include "meals/log_part.html" with log=log %}
   </tbody>
 </table>
+<div class="row">
+  <a class="btn btn-primary pull-right" href="{% url "persons:detail" meal.person.name %}">{% trans "Volver" %}</a>
+</div>
 <div class="jumbotron">{{ log }}</div>
 <div class="jumbotron">{{ meal.data }}</div>
 {% endblock content %}
