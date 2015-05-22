@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_tags %}
+
+{% block title %}{% blocktrans %}Agregar subcomida a {{ name }}:{{ path }}{% endblocktrans %}{% endblock title %}
+{% block page_title %}{% blocktrans %}Agregar subcomida a {{ name }}:{{ path }}{% endblocktrans %}{% endblock page_title %}
+
+{% block content %}
+{% crispy form %}
+{% endblock content %}
+
+{# vim: set ft=htmldjango :#}

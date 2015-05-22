@@ -115,10 +115,11 @@ class IngredientImportForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.layout = Layout(
             'data',
-            FormActions(Submit('submit', _('Agregar'),
+            FormActions(Submit('submit', _('Importar'),
                                css_class='btn-primary pull-right',
-                               data_loading_text=_('Agregando...')), )
+                               data_loading_text=_('Importando...')), )
         )  # yapf: disable
+
     def clean_data(self):
         try:
             ingredient = VldIngredient.from_json(self.cleaned_data['data'])
@@ -133,3 +134,28 @@ class IngredientImportForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         self.instance.save_as(self.cleaned_data['ingredient'])
+
+
+class IngredientMassImportForm(forms.Form):
+    data = forms.CharField(widget=forms.Textarea(), label=_('Data'))
+
+    def __init__(self, *args, **kwargs):
+        super(IngredientMassImportForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'data',
+            FormActions(Submit('submit', _('Importar'),
+                               css_class='btn-primary pull-right',
+                               data_loading_text=_('Importando...')), )
+        )  # yapf: disable
+
+
+    def clean_data(self):
+        try:
+            data = json.loads(self.cleaned_data['data'])
+        except ValueError:
+            raise forms.ValidationError('No es un object JSON válido.')
+        if not isinstance(data, list):
+            data = [data]
+        return data
+

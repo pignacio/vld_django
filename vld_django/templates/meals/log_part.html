@@ -1,0 +1,23 @@
+{% load i18n %}
+{% with level_=level|default:0 path_=path|default:"" %}
+<tr class='log-level-{{ level_ }}'>
+  <td>{{ log.name }}</td>
+  <td>{{ log.nutritional_value.consumed_carbs|floatformat:2|default:"???" }}</td>
+  <td>{{ log.nutritional_value.protein|floatformat:2|default:"???" }}</td>
+  <td>{{ log.nutritional_value.fat|floatformat:2|default:"???" }}</td>
+  <td>{{ log.nutritional_value.fiber|floatformat:2|default:"???" }}</td>
+  <td>
+    {% if not log.is_leaf %}
+    <a href="{% url "meals:add_section" meal.person meal.date path_ %}" title="{% trans "Agregar subcomida" %}"><span class="glyphicon glyphicon-plus"></span></a>
+    <a href="{% url "meals:edit_section" meal.person meal.date path_ %}" title="{% trans "Editar ingredientes" %}"><span class="glyphicon glyphicon-th-list"></span></a>
+    {#    <a href="{% url "meals:delete_section" meal.person meal.date path_ %}" title="{% trans "Borrar" %}"><span class="glyphicon glyphicon-remove"></span></a> #}
+    {% endif %}
+  </td>
+</tr>
+{% with dot=path|yesno:'.,'%}
+{% for part in log.parts %}
+{% include "meals/log_part.html" with log=part level=level_|add:1 path=path_|add:dot|add:part.name%}
+{% endfor %}
+{% endwith %}
+{% endwith %}
+{# vim: set ft=htmldjango :#}

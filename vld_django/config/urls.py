@@ -22,10 +22,14 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 
 import ingredient.urls
+import persons.urls
+import meals.urls
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
     url(r'^ingredient/', include(ingredient.urls, namespace='ingredient')),
+    url(r'^persons/', include(persons.urls, namespace='persons')),
+    url(r'^meals/', include(meals.urls, namespace='meals')),
     url(r'^admin/', include(admin.site.urls)),
 ]  # yapf: disable
 

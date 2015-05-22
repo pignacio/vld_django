@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Comida - {{ meal.person.name }} - {{ meal.date }}{% endblock title %}
+{% block page_title %}Comida - {{ meal.person.name }} - {{ meal.date }}{% endblock page_title %}
+
+{% block content %}
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% trans "Comida" %}</th>
+      <th>{% trans "Net carbs" %}</th>
+      <th>{% trans "Proteina" %}</th>
+      <th>{% trans "Grasa" %}</th>
+      <th>{% trans "Fibra" %}</th>
+      <th>{% trans "Acciones" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% include "meals/log_part.html" with log=log %}
+  </tbody>
+</table>
+<div class="jumbotron">{{ log }}</div>
+<div class="jumbotron">{{ meal.data }}</div>
+{% endblock content %}
+{# vim: set ft=htmldjango :#}

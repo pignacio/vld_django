@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Personas" %}{% endblock title %}
+{% block page_title %}{% trans "Personas" %}{% endblock page_title %}
+
+{% block page_buttons %}
+<a href="{% url "persons:create" %}" title="{% trans "Agregar persona" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
+{% endblock page_buttons %}
+
+{% block content %}
+
+{% if person_list %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for person in person_list %}
+  <tr>
+    <td><a href="{% url "persons:detail" person.name %}">{{ person.name }}</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="jumbotron">{% trans "No hay personas!" %}</div>
+{% endif %}
+{% endblock content %}
+
+{# vim: set ft=htmldjango :#}

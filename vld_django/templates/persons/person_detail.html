@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}Persona - {{ person.name }}{% endblock title %}
+{% block page_title %}Persona - {{ person.name }}{% endblock page_title %}
+
+{% block page_buttons %}
+<a href="{% url "meals:create" person.name %}" title="{% trans "Agregar comida" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
+{% endblock page_buttons %}
+
+{% block content %}
+
+<h2>{% trans "Comidas" %} </h2>
+{% if person.meal_set.exists %}
+<ul>
+  {% for meal in person.meal_set.all %}
+  <li><a href="{% url "meals:detail" person.name meal.date %}">{{ meal.date }}</a></li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="jumbotron">{% trans "No hay comidas." %}</div>
+{% endif %}
+{% endblock content %}
+{# vim: set ft=htmldjango :#}

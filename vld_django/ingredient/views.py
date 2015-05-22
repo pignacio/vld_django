@@ -6,10 +6,13 @@ from __future__ import absolute_import, unicode_literals, division
 import logging
 
 from django.core.urlresolvers import reverse
-from django.shortcuts import render
-from django.views.generic import ListView, CreateView, DetailView
+from django.shortcuts import render, redirect
+from django.views.generic import ListView, CreateView, DetailView, FormView
 
-from .forms import IngredientForm, IngredientImportForm
+from var_log_dieta.objects import Ingredient as VldIngredient
+
+from .forms import (IngredientForm, IngredientImportForm,
+                    IngredientMassImportForm)
 from .models import Ingredient
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -28,7 +31,7 @@ class IngredientImportView(CreateView):
 
     def get_success_url(self):
         return reverse('ingredient:detail',
-                       ingredient_id=self.form.instance.id)
+                       ingredient_id=self.object.id)
 
 
 class IngredientCreateView(CreateView):
@@ -38,9 +41,30 @@ class IngredientCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('ingredient:detail',
-                       ingredient_id=self.form.instance.id)
+                       kwargs={'ingredient_id': self.object.id})
 
 
 class IngredientDetailView(DetailView):
     model = Ingredient
     pk_url_kwarg = 'ingredient_id'
+
+
+class IngredientMassImportView(FormView):
+    form_class = IngredientMassImportForm
+    template_name = 'ingredient/ingredient_import.html'
+
+    def form_valid(self, form):
+        datas = form.cleaned_data['data']
+        for data in datas:
+            try:
+                name = data["name"]
+                try:
+                    ingredient = Ingredient.objects.get(name=name)
+                except Ingredient.DoesNotExist:
+                    ingredient = Ingredient()
+                ingredient.save_as(VldIngredient.from_json(data))
+            except Exception:
+                logger.exception('Error importing ingredient from %s', data)
+        return redirect('ingredient:list')
+
+

@@ -25,6 +25,8 @@ class Ingredient(models.Model):
         verbose_name = 'ingredient'
         verbose_name_plural = 'ingredients'
 
+        ordering = ('name',)
+
     def as_object(self):
         return VldIngredient.from_json(self.data)
 
