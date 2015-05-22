@@ -107,7 +107,7 @@ class MealEditSectionView(LoginRequiredMixin, UpdateView):
             except KeyError:
                 data[name] = {}
                 data = data[name]
-        res['ingredients'] = data['__init__']
+        res['ingredients'] = data.get('__init__', [])
         return res
 
     def get_object(self):
