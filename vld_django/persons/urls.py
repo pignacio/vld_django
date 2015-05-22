@@ -15,5 +15,6 @@ urlpatterns = patterns(  # pylint: disable=invalid-name
     'persons.views',
     url(r'^$', views.PersonListView.as_view(), name='list'),
     url(r'^create$', views.PersonCreateView.as_view(), name='create'),
+    url(r'^(?P<person_name>\w+)/import$', views.PersonImportView.as_view(), name='import'),
     url(r'^(?P<person_name>\w+)$', views.PersonDetailView.as_view(), name='detail'),
 )  # yapf: disable

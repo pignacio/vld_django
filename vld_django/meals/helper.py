@@ -16,3 +16,19 @@ def process_meal_data(meal):
     ingredients = IngredientMap([x.as_object()
                                  for x in Ingredient.objects.all()])
     return process_log(meal.date.strftime('%F'), meal.data, ingredients)
+
+
+def trim_meals_data(data):
+    res = {}
+
+    for key, value in data.items():
+        if key == '__init__':
+            if not value:
+                continue
+            trimmed = value
+        else:
+            trimmed = trim_meals_data(value)
+            if not trimmed:
+                continue
+        res[key] = trimmed
+    return res

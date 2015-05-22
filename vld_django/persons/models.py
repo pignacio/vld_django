@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals, division
 
 import logging
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext as _
 
@@ -22,6 +23,8 @@ class Person(models.Model):
         verbose_name_plural = 'persons'
         ordering = ('name', )
 
+    def get_absolute_url(self):
+        return reverse('persons:detail', kwargs={'person_name': self.name})
 
     def __unicode__(self):
         return self.name
