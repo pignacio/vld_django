@@ -69,10 +69,6 @@ class MealAddSectionView(MealViewMixin, UpdateView):
         data = super(MealAddSectionView, self).get_context_data(*args,
                                                                 **kwargs)
         data['path'] = self.kwargs['path']
-        data['name'] = data['meal'].person.name
-        #TODO(pignacio): Fix this strange lookup. meal.person.name does not
-        # show on the template
-        logger.debug('DATA: %s', data)
         return data
 
 
@@ -99,10 +95,6 @@ class MealEditSectionView(MealViewMixin, UpdateView):
         data = super(MealEditSectionView, self).get_context_data(*args,
                                                                  **kwargs)
         data['path'] = self.kwargs['path']
-        data['name'] = data['meal'].person.name
-        # TODO(pignacio): Fix this strange lookup. meal.person.name does not
-        #     show on the template
-        logger.debug('DATA: %s', data)
         return data
 
     def get_form_kwargs(self, *args, **kwargs):

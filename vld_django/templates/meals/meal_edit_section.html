@@ -1,8 +1,18 @@
 {% extends "base.html" %}
 {% load i18n crispy_forms_tags %}
 
-{% block title %}{% blocktrans %}Editando {{ name }}:{{ path }}{% endblocktrans %}{% endblock title %}
-{% block page_title %}{% blocktrans %}Editando {{ name }}:{{ path }}{% endblocktrans %}{% endblock page_title %}
+{% block title %}
+{% blocktrans with name=meal.person.name date=meal.date|date:"Y-m-d" %}
+Editando {{ name }}@{{ date }}:{{ path }}.
+{% endblocktrans %}
+{% endblock title %}
+
+{% block page_title %}
+{% blocktrans with name=meal.person.name date=meal.date|date:"Y-m-d" %}
+Editando {{ name }}@{{ date }}:{{ path }}.
+{% endblocktrans %}
+{% endblock page_title %}
+
 
 {% block content %}
 {% crispy form %}
