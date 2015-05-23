@@ -6,26 +6,32 @@ import logging
 
 from django.shortcuts import get_object_or_404, redirect
 from django.core.urlresolvers import reverse
-from django.views.generic import (ListView, DetailView, UpdateView,
-                                  CreateView)
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from utils.views import LoginRequiredMixin
 from meals.models import Meal
 from meals.helper import trim_meals_data
 from .models import Person
-from .forms import PersonImportForm
+from .forms import PersonImportForm, PersonUpdateForm
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
 class PersonCreateView(LoginRequiredMixin, CreateView):
     model = Person
-    fields = ('name', )
+    fields = ('name', 'default_meal_data')
     template_name = 'persons/person_create.html'
 
     def get_success_url(self):
         return reverse('persons:detail',
                        kwargs={'person_name': self.object.name})
+
+
+class PersonUpdateView(LoginRequiredMixin, UpdateView):
+    model = Person
+    pk_url_kwarg = 'person_name'
+    form_class = PersonUpdateForm
+    template_name_suffix = '_update'
 
 
 class PersonDetailView(LoginRequiredMixin, DetailView):
@@ -49,8 +55,6 @@ class PersonImportView(LoginRequiredMixin, UpdateView):
             meal.save()
 
         return redirect(self.object.get_absolute_url())
-
-
 
 
 class PersonListView(LoginRequiredMixin, ListView):

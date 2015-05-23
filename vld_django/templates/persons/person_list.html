@@ -15,12 +15,14 @@
   <thead>
     <tr>
       <th>{% trans "Nombre" %}</th>
+      <th>{% trans "Acciones" %}</th>
     </tr>
   </thead>
   <tbody>
   {% for person in person_list %}
   <tr>
     <td><a href="{% url "persons:detail" person.name %}">{{ person.name }}</a></td>
+    <td><a href="{% url "persons:update" person.name %}" title="{% trans "Editar" %}"><span class="glyphicon glyphicon-edit"></span></a></td>
   </tr>
   {% endfor %}
   </tbody>

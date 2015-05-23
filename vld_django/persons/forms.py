@@ -31,7 +31,6 @@ class PersonImportForm(forms.Form):
                                data_loading_text=_('Importando...')), )
         )  # yapf: disable
 
-
     def clean_data(self):
         try:
             data = json.loads(self.cleaned_data['data'])
@@ -51,3 +50,17 @@ class PersonImportForm(forms.Form):
             raise forms.ValidationError('Una de las fechas no fue valida.')
 
         return data
+
+
+class PersonUpdateForm(forms.ModelForm):
+    class Meta(object):
+        model = Person
+        fields = ('default_meal_data', )
+
+    def __init__(self, *args, **kwargs):
+        super(PersonUpdateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout('default_meal_data', FormActions(
+            Submit('submit', _('Guardar'),
+                   css_class='btn-primary pull-right',
+                   data_loading_text=_('Guardando...')), ))
