@@ -28,7 +28,9 @@ class MealViewMixin(LoginRequiredMixin):
         try:
             return Meal.objects.get(person=person, date=date)
         except Meal.DoesNotExist:
-            return Meal(person=person, date=date, data={})
+            return Meal(person=person,
+                        date=date,
+                        data=person.default_meal_data)
 
     def get_context_data(self, *args, **kwargs):
         res = super(MealViewMixin, self).get_context_data(*args, **kwargs)
