@@ -16,6 +16,22 @@ Editando {{ name }}@{{ date }}:{{ path }}.
 
 {% block content %}
 {% crispy form %}
+<div id="meal-counter"></div>
 {% endblock content %}
+
+{% block extra_js %}
+<script>
+$(document).ready(function() {
+  $('#meal-counter-button').click(function(){
+    $('#meal-counter').html('LOADING....');
+    $.post(
+      "{% url "meals:counter" %}",
+      {ingredients: $('#id_ingredients').val()},
+      function(data) { $('#meal-counter').html(data)}
+    );
+  });
+})
+</script>
+{% endblock extra_js %}
 
 {# vim: set ft=htmldjango :#}

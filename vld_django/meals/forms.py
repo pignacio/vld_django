@@ -8,7 +8,7 @@ from django.utils.translation import ugettext as _
 
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit
+from crispy_forms.layout import Layout, Submit, Button
 import floppyforms.__future__ as forms
 
 from .models import Meal
@@ -60,7 +60,8 @@ class MealEditSectionForm(forms.Form):
 
     def __init__(self, instance, ingredients, *args, **kwargs):
         initial = kwargs.pop('initial', {})
-        initial['ingredients'] = '\n'.join(i.strip() for i in ingredients)
+        initial['ingredients'] = '\n'.join(i.strip()
+                                           for i in ingredients or [])
         super(MealEditSectionForm, self).__init__(*args,
                                                   initial=initial, **kwargs)
         self.helper = FormHelper()
@@ -68,7 +69,11 @@ class MealEditSectionForm(forms.Form):
             'ingredients',
             FormActions(Submit('submit', _('Agregar'),
                                css_class='btn-primary pull-right',
-                               data_loading_text=_('Agregando...')), )
+                               data_loading_text=_('Agregando...')),
+                        Button('meal-counter-button', _('Calcular'),
+                               css_id='meal-counter-button',
+                               css_class='pull-right'),
+                        )
         )  # yapf: disable
 
     def clean_ingredients(self):

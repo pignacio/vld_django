@@ -10,22 +10,7 @@
 {% endblock page_buttons %}
 
 {% block content %}
-<table class="table">
-  <thead>
-    <tr>
-      <th>{% trans "Comida" %}</th>
-      <th>{% trans "Calorías" %}</th>
-      <th>{% trans "Net carbs" %}</th>
-      <th>{% trans "Proteina" %}</th>
-      <th>{% trans "Grasa" %}</th>
-      <th>{% trans "Fibra" %}</th>
-      <th>{% trans "Acciones" %}</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% include "meals/log_part.html" with log=log %}
-  </tbody>
-</table>
+{% include "meals/meal_log.html" %}
 <div class="row">
   <a class="btn btn-primary pull-right" href="{% url "persons:detail" meal.person.name %}">{% trans "Volver" %}</a>
 </div>

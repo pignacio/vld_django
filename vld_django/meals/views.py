@@ -5,15 +5,16 @@ from __future__ import absolute_import, unicode_literals, division
 import datetime
 import logging
 
-from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, redirect
-from django.views.generic import (ListView, DetailView, RedirectView,
-                                  CreateView, UpdateView)
+from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import (DetailView, RedirectView, CreateView,
+                                  UpdateView)
 
 from utils.views import LoginRequiredMixin
 from persons.models import Person
 from .forms import MealCreateForm, MealAddSectionForm, MealEditSectionForm
-from .helper import process_meal_data
+from .helper import process_meal_data, process_meal
 from .models import Meal
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -56,7 +57,7 @@ class MealDetailView(MealViewMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         data = super(MealDetailView, self).get_context_data(*args, **kwargs)
-        data['log'] = process_meal_data(self.object)
+        data['log'] = process_meal(self.object)
         return data
 
 
@@ -70,7 +71,6 @@ class MealAddSectionView(MealViewMixin, UpdateView):
                                                                 **kwargs)
         data['path'] = self.kwargs['path']
         return data
-
 
     def form_valid(self, form):
         path = [p for p in self.kwargs['path'].split('.') if p]
@@ -122,3 +122,15 @@ class MealEditSectionView(MealViewMixin, UpdateView):
         data['__init__'] = form.cleaned_data['ingredients']
         self.object.save()
         return redirect(self.object.get_absolute_url())
+
+
+@csrf_exempt
+def meal_counter(request):
+    log = None
+    form = MealEditSectionForm(data=request.POST,
+                               instance=None,
+                               ingredients=None)
+    if form.is_valid():
+        log = process_meal_data(
+            'TOTAL', {'__init__': form.cleaned_data['ingredients']})
+    return render(request, 'meals/meal_log.html', {'log': log, })
