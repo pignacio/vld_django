@@ -18,4 +18,5 @@ urlpatterns = patterns(  # pylint: disable=invalid-name
     url(r'^(?P<person_name>\w+)/(?P<date>\d{4}-\d{2}-\d{2})/add/(?P<path>.*)$', views.MealAddSectionView.as_view(), name='add_section'),
     url(r'^(?P<person_name>\w+)/(?P<date>\d{4}-\d{2}-\d{2})/edit/(?P<path>.*)$', views.MealEditSectionView.as_view(), name='edit_section'),
     url(r'^(?P<person_name>\w+)/(?P<date>\d{4}-\d{2}-\d{2})/delete/(?P<path>.*)$', views.MealAddSectionView.as_view(), name='delete_section'),
+    url(r'^counter$', views.meal_counter, name='counter'),
 )  # yapf: disable

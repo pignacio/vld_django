@@ -8,7 +8,7 @@
   <td>{{ log.nutritional_value.fat|floatformat:2|default:"???" }}</td>
   <td>{{ log.nutritional_value.fiber|floatformat:2|default:"???" }}</td>
   <td>
-    {% if not log.is_leaf %}
+    {% if not log.is_leaf and meal %}
     <a href="{% url "meals:add_section" meal.person meal.date path_ %}" title="{% trans "Agregar subcomida" %}"><span class="glyphicon glyphicon-plus"></span></a>
     <a href="{% url "meals:edit_section" meal.person meal.date path_ %}" title="{% trans "Editar ingredientes" %}"><span class="glyphicon glyphicon-th-list"></span></a>
     {#    <a href="{% url "meals:delete_section" meal.person meal.date path_ %}" title="{% trans "Borrar" %}"><span class="glyphicon glyphicon-remove"></span></a> #}

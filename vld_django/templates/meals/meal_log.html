@@ -1,0 +1,19 @@
+{% load i18n %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% trans "Comida" %}</th>
+      <th>{% trans "Calorías" %}</th>
+      <th>{% trans "Net carbs" %}</th>
+      <th>{% trans "Proteina" %}</th>
+      <th>{% trans "Grasa" %}</th>
+      <th>{% trans "Fibra" %}</th>
+      <th>{% trans "Acciones" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% include "meals/log_part.html" %}
+  </tbody>
+</table>
+
+{# vim: set ft=htmldjango :#}

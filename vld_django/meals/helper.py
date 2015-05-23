@@ -12,10 +12,13 @@ from ingredient.models import Ingredient
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
-def process_meal_data(meal):
+def process_meal(meal):
+    return process_meal_data(meal.date.strftime('%F'), meal.data)
+
+def process_meal_data(name, data):
     ingredients = IngredientMap([x.as_object()
                                  for x in Ingredient.objects.all()])
-    return process_log(meal.date.strftime('%F'), meal.data, ingredients)
+    return process_log(name, data, ingredients)
 
 
 def trim_meals_data(data):
