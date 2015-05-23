@@ -56,7 +56,7 @@ class MealAddSectionForm(forms.Form):
 
 
 class MealEditSectionForm(forms.Form):
-    ingredients = forms.CharField(widget=forms.Textarea())
+    ingredients = forms.CharField(widget=forms.Textarea(), required=False)
 
     def __init__(self, instance, ingredients, *args, **kwargs):
         initial = kwargs.pop('initial', {})
