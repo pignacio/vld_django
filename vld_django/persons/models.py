@@ -8,11 +8,14 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext as _
 
+from jsonfield import JSONField
+
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
 class Person(models.Model):
     name = models.CharField(_('Nombre'), max_length=255, primary_key=True)
+    default_meal_data = JSONField(_('Comida por defecto'))
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
