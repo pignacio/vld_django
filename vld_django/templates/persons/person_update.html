@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_tags %}
+
+{% block title %}{% trans "Editar persona" %}{% endblock title %}
+{% block page_title %}{% trans "Editar persona" %}{% endblock page_title %}
+
+{% block content %}
+{% crispy form %}
+{% endblock content %}
+
+{# vim: set ft=htmldjango :#}
