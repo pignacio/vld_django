@@ -1,7 +1,12 @@
 {% load i18n %}
 {% with level_=level|default:0 path_=path|default:"" %}
 <tr class='log-level-{{ level_ }}'>
-  <td>{{ log.name }}</td>
+  <td>
+    {{ log.name }}
+    {% if log.incomplete %}
+    <span title="{% trans "Faltan datos" %}" class="glyphicon glyphicon-warning-sign icon-error"></span>
+    {% endif %}
+  </td>
   <td>{{ log.nutritional_value.calories|floatformat:2|default:"???" }}</td>
   <td>{{ log.nutritional_value.consumed_carbs|floatformat:2|default:"???" }}</td>
   <td>{{ log.nutritional_value.protein|floatformat:2|default:"???" }}</td>
