@@ -56,10 +56,18 @@ body {
 
 <div class="container">
   {% block _content %}
-  <h1>
-    {% block page_title %}Example base template{% endblock page_title %}
-    <div class="pull-right">{% block page_buttons %}{% endblock page_buttons %}</div>
-  </h1>
+  <div class="row">
+    <div class="col-md-10 col-xs-8">
+      <h1>
+        {% block page_title %}Example base template{% endblock page_title %}
+      </h1>
+    </div>
+    <div class="col-md-2 col-xs-4">
+      <h1>
+        <div class="pull-right">{% block page_buttons %}{% endblock page_buttons %}</div>
+      </h1>
+    </div>
+  </div>
 
   {% block content %}
   <p>Use this document as a way to quick start any new project.</p>
