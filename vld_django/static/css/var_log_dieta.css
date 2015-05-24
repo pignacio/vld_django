@@ -13,3 +13,8 @@
 .log-level-4 {
   background-color: #662222;
 }
+
+.icon-error {
+  color: #f39c12;
+  font-size: larger;
+}
