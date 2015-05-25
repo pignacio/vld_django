@@ -4,6 +4,7 @@ from __future__ import absolute_import, unicode_literals, division
 
 import logging
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext as _
 
@@ -25,7 +26,7 @@ class Ingredient(models.Model):
         verbose_name = 'ingredient'
         verbose_name_plural = 'ingredients'
 
-        ordering = ('name',)
+        ordering = ('name', )
 
     def as_object(self):
         return VldIngredient.from_json(self.data)
@@ -34,3 +35,9 @@ class Ingredient(models.Model):
         self.name = ingredient.name
         self.data = ingredient.as_json()
         self.save()
+
+    def get_absolute_url(self):
+        return reverse('ingredient:detail', kwargs={'ingredient_id': self.id})
+
+    def __unicode__(self):
+        return self.name

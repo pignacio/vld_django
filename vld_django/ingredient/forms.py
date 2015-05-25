@@ -103,6 +103,7 @@ class IngredientForm(forms.ModelForm):
                                      for f in VldIngredient._fields])
         logger.debug('ingredient: %s', ingredient)
         self.instance.save_as(ingredient)
+        return self.instance
 
 
 class IngredientImportForm(forms.ModelForm):
@@ -134,6 +135,7 @@ class IngredientImportForm(forms.ModelForm):
 
     def save(self, *args, **kwargs):
         self.instance.save_as(self.cleaned_data['ingredient'])
+        return self.instance
 
 
 class IngredientMassImportForm(forms.Form):
