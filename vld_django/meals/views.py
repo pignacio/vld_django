@@ -39,7 +39,7 @@ class MealViewMixin(LoginRequiredMixin):
         return res
 
 
-class MealCreateView(LoginRequiredMixin, CreateView):
+class MealCreateView(MealViewMixin, CreateView):
     model = Meal
     template_name_suffix = '_create'
     form_class = MealCreateForm
@@ -49,9 +49,6 @@ class MealCreateView(LoginRequiredMixin, CreateView):
         res['person'] = get_object_or_404(Person,
                                           name=self.kwargs['person_name'])
         return res
-
-    def get_success_url(self):
-        return self.object.get_success_url()
 
 
 class MealDetailView(MealViewMixin, DetailView):
