@@ -5,12 +5,11 @@ from __future__ import absolute_import, unicode_literals, division
 
 import logging
 
-from django.core.urlresolvers import reverse
-from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, DetailView, FormView
 
 from var_log_dieta.objects import Ingredient as VldIngredient
-
 
 from utils.views import LoginRequiredMixin
 from .forms import (IngredientForm, IngredientImportForm,
@@ -30,20 +29,15 @@ class IngredientImportView(LoginRequiredMixin, CreateView):
     model = Ingredient
     form_class = IngredientImportForm
     template_name = 'ingredient/ingredient_import.html'
+    success_url = reverse_lazy('ingredient:list')
 
-    def get_success_url(self):
-        return reverse('ingredient:detail',
-                       ingredient_id=self.object.id)
 
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
     form_class = IngredientForm
     template_name = 'ingredient/ingredient_create.html'
-
-    def get_success_url(self):
-        return reverse('ingredient:detail',
-                       kwargs={'ingredient_id': self.object.id})
+    success_url = reverse_lazy('ingredient:list')
 
 
 class IngredientDetailView(LoginRequiredMixin, DetailView):
@@ -68,5 +62,3 @@ class IngredientMassImportView(LoginRequiredMixin, FormView):
             except Exception:
                 logger.exception('Error importing ingredient from %s', data)
         return redirect('ingredient:list')
-
-
