@@ -16,7 +16,7 @@ function updateIngredientFinder() {
     return;
   var results = fuse.search(search);
   $.each(results, function() {
-    results_div.append('<li><span class="ingredient-finder-result-name">' + this.name + '</span>.<br /><span class="ingredient-finder-result-units">Units: ' + this.units + '</span></li>')
+    results_div.append('<li><span class="ingredient-finder-result-name">' + this.name + '</span><br /><span class="ingredient-finder-result-units">{% trans "Unidades" %}: ' + this.units + '</span></li>')
   })
 
 }
