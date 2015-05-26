@@ -18,3 +18,17 @@
   color: #f39c12;
   font-size: larger;
 }
+
+.ingredient-finder-panel {
+  height: 300px;
+  overflow: hidden;
+}
+
+.ingredient-finder-panel>li{
+  list-style-type: none;
+}
+
+.ingredient-finder-result-name {
+  font-weight: bold;
+  font-size: larger;
+}

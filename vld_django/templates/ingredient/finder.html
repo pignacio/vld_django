@@ -1,0 +1,28 @@
+{% load i18n staticfiles %}
+<input class='form-control' type="text" id="ingredient-finder-search" placeholder='{% trans "Buscar ingredientes" %}...' />
+<div class="panel ingredient-finder-panel" id='ingredient-finder-results'></div>
+
+
+{% block extra_js %}
+<script src="{% static 'js/fuse.min.js'%}"></script>
+<script>
+var ingredients = {{ ingredients|safe }};
+var fuse = new Fuse(ingredients, {keys: ['name']})
+function updateIngredientFinder() {
+  var results_div = $('#ingredient-finder-results');
+  results_div.empty()
+  var search =  $('#ingredient-finder-search').val();
+  if (search == '')
+    return;
+  var results = fuse.search(search);
+  $.each(results, function() {
+    results_div.append('<li><span class="ingredient-finder-result-name">' + this.name + '</span>.<br /><span class="ingredient-finder-result-units">Units: ' + this.units + '</span></li>')
+  })
+
+}
+
+$('#ingredient-finder-search').on('keyup', updateIngredientFinder)
+
+</script>
+{% endblock extra_js %}
+{# vim: set ft=htmldjango :#}

@@ -15,13 +15,23 @@ Editando {{ name }}@{{ date }}:{{ path }}.
 
 
 {% block content %}
-{% crispy form %}
+<div class="row">
+  <div class="col-md-8">
+    {% crispy form %}
+  </div>
+  <div class="col-md-4">
+    <div id="ingredient-finder"></div>
+  </div>
+</div>
 <div id="meal-counter"></div>
 {% endblock content %}
 
 {% block extra_js %}
 <script>
 $(document).ready(function() {
+  $.get('{% url "ingredient:finder" %}', function(data){
+    $('#ingredient-finder').html(data);
+  });
   $('#meal-counter-button').click(function(){
     $('#meal-counter').html('LOADING....');
     $.post(

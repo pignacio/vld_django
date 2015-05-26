@@ -17,4 +17,5 @@ urlpatterns = patterns(  # pylint: disable=invalid-name
     url(r'^create$', views.IngredientCreateView.as_view(), name='create'),
     url(r'^import$', views.IngredientMassImportView.as_view(), name='import'),
     url(r'^detail/(?P<ingredient_id>\d+)$', views.IngredientDetailView.as_view(), name='detail'),
+    url(r'^finder$', views.ingredient_finder, name='finder'),
 )  # yapf: disable
