@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n crispy_forms_tags %}
+{% load i18n crispy_forms_tags staticfiles %}
 
 {% block title %}
 {% blocktrans with name=meal.person.name date=meal.date|date:"Y-m-d" %}
@@ -20,27 +20,58 @@ Editando {{ name }}@{{ date }}:{{ path }}.
     {% crispy form %}
   </div>
   <div class="col-md-4">
-    <div id="ingredient-finder"></div>
+    <div id="ingredient-finder">
+      <div class="panel ingredient-finder-panel" id='ingredient-finder-results'></div>
+    </div>
   </div>
 </div>
 <div id="meal-counter"></div>
 {% endblock content %}
 
 {% block extra_js %}
+<script src="{% static 'js/fuse.min.js'%}"></script>
 <script>
+var ingredients = {{ ingredients|safe }};
+var fuse = new Fuse(ingredients, {keys: ['name']})
+
+
+function updateIngredientFinder() {
+  var results_div = $('#ingredient-finder-results');
+  results_div.empty();
+  var search =  getCurrentTextareaLine($('#id_ingredients')[0]);
+  if (search == '')
+    return;
+  var results = fuse.search(search);
+  $.each(results, function() {
+      results_div.append('<li><span class="ingredient-finder-result-name">' + this.name + '</span><br /><span class="ingredient-finder-result-units">{% trans "Unidades" %}: ' + this.units + '</span></li>')
+      });
+}
+
+function getCurrentTextareaLine(textarea) {
+  var value = textarea.value;
+  var cursor = textarea.selectionStart;
+  var count = 0;
+  var index = cursor - 1;
+  while (index >= 0) {
+    if (value[index] == '\n') {
+      count++;
+    }
+    index--;
+  }
+  return value.split('\n')[count];
+}
+
 $(document).ready(function() {
-  $.get('{% url "ingredient:finder" %}', function(data){
-    $('#ingredient-finder').html(data);
-  });
-  $('#meal-counter-button').click(function(){
-    $('#meal-counter').html('LOADING....');
-    $.post(
-      "{% url "meals:counter" %}",
-      {ingredients: $('#id_ingredients').val()},
-      function(data) { $('#meal-counter').html(data)}
-    );
-  });
-})
+    $('#id_ingredients').on('keyup', updateIngredientFinder);
+    $('#meal-counter-button').click(function(){
+      $('#meal-counter').html('LOADING....');
+      $.post(
+        "{% url "meals:counter" %}",
+        {ingredients: $('#id_ingredients').val()},
+        function(data) { $('#meal-counter').html(data)}
+        );
+      });
+    })
 </script>
 {% endblock extra_js %}
 

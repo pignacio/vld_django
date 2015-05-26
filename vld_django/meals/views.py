@@ -3,6 +3,7 @@
 from __future__ import absolute_import, unicode_literals, division
 
 import datetime
+import json
 import logging
 
 from django.shortcuts import get_object_or_404, redirect
@@ -14,7 +15,7 @@ from django.views.generic import (DetailView, RedirectView, CreateView,
 from utils.views import LoginRequiredMixin
 from persons.models import Person
 from .forms import MealCreateForm, MealAddSectionForm, MealEditSectionForm
-from .helper import process_meal_data, process_meal
+from .helper import process_meal_data, process_meal, get_ingredients_data
 from .models import Meal
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -93,6 +94,7 @@ class MealEditSectionView(MealViewMixin, UpdateView):
     def get_context_data(self, *args, **kwargs):
         data = super(MealEditSectionView, self).get_context_data(*args,
                                                                  **kwargs)
+        data['ingredients'] = json.dumps(get_ingredients_data(), indent=1)
         data['path'] = self.kwargs['path']
         return data
 
