@@ -68,6 +68,7 @@ class IngredientMassImportView(LoginRequiredMixin, FormView):
 def _get_units(ingredient):
     units = ingredient.valid_units(ingredient.sample_unit)
     values = ["{} ({:.2f} {})".format(unit, amount, ingredient.sample_unit)
+              if unit != ingredient.sample_unit else unit
               for unit, amount in units.items()]
     return ", ".join(values)
 
