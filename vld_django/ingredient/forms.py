@@ -11,7 +11,7 @@ from crispy_forms.bootstrap import FormActions
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 import floppyforms.__future__ as forms
-from var_log_dieta.objects import NutritionalValue, Ingredient as VldIngredient
+from vld.objects import NutritionalValue, Ingredient as VldIngredient
 
 from .models import Ingredient
 

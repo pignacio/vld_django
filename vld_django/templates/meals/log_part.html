@@ -8,7 +8,7 @@
     {% endif %}
   </td>
   <td>{{ log.nutritional_value.calories|floatformat:2|default:"???" }}</td>
-  <td>{{ log.nutritional_value.consumed_carbs|floatformat:2|default:"???" }}</td>
+  <td>{{ log.nutritional_value.net_carbs|floatformat:2|default:"???" }}</td>
   <td>{{ log.nutritional_value.protein|floatformat:2|default:"???" }}</td>
   <td>{{ log.nutritional_value.fat|floatformat:2|default:"???" }}</td>
   <td>{{ log.nutritional_value.fiber|floatformat:2|default:"???" }}</td>
