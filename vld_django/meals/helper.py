@@ -25,7 +25,7 @@ def process_meals(meals):
 
 
 def process_meal_data(name, data):
-    return process_meal_datas((name, data))[0]
+    return process_meal_datas([(name, data)])[0]
 
 
 def process_meal_datas(datas):
