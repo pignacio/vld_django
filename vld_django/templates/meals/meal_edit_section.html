@@ -48,13 +48,16 @@ function autocompleteIngredientFinder(event) {
 function updateIngredientFinder(event) {
   var results_div = $('#ingredient-finder-results');
   results_div.empty();
-  var search =  getCurrentTextareaLine(textarea);
+  var search =  getCurrentTextareaLine(textarea).split(',')[0];
   if (search == '')
     return;
   results = fuse.search(search);
   $.each(results, function() {
       results_div.append('<li><span class="ingredient-finder-result-name">' + this.name + '</span><br /><span class="ingredient-finder-result-units">{% trans "Unidades" %}: ' + this.units + '</span></li>')
       });
+  $('.ingredient-finder-result-name').click(function() {
+      replaceCurrentTextareaLine(textarea, this.innerHTML);
+      })
 }
 
 function getCurrentTextareaLine(textarea) {
@@ -81,14 +84,16 @@ function replaceCurrentTextareaLine(textarea, line) {
     index--;
   }
   lines = value.split('\n');
-  var autocomplete = line + ', ';
-  if (lines[count].substr(0, autocomplete.length) != autocomplete)
-    lines[count] = autocomplete;
+  line_split = lines[count].split(',');
+  line_split[0] = line;
+  if (line_split.length == 1)
+    line_split.push(' ');
+  lines[count] = line_split.join(',')
   var position = 0;
   for (i=0; i <= count; i++) {
-    position += lines[i].length;
+    position += lines[i].length + 1;
   }
-  position += count;
+  position -= 1; // Last newline
   textarea.value = lines.join('\n');
   textarea.selectionStart = textarea.selectionEnd = position;
 }
