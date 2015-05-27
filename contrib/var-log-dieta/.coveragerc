@@ -1,8 +1,0 @@
-[report]
-exclude_lines =
-    raise NotImplementedError()
-
-show_missing = True
-precision = 2
-
-include = var_log_dieta/*
