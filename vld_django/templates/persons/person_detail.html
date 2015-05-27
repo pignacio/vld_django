@@ -17,13 +17,19 @@
   <li class="meal">
   <h4><a href="{% url "meals:detail" person.name meal.date %}">{{ meal.date|date:'M j, Y' }}</a></h4>
   {% with nval=log.nutritional_value %}
-  <span class="meal-value-{{ nval.calories|range_class:person.valid_calories }}">{{ nval.calories|floatformat:1 }} kCal</span>
+  {% include "meals/layout/meal_value.html" with value=nval.calories range=person.valid_calories is_free=meal.is_free unit="kCal" only %}
   <table class="table text-center meal-table">
     <tbody>
     <tr>
-      <td class="meal-value-{{ nval.consumed_carbs|range_class:person.valid_carbs }}" title="{% trans "Net carbs" %}">{{ nval.consumed_carbs|floatformat:1 }}</td>
-      <td class="meal-value-{{ nval.protein|range_class:person.valid_proteins }}" title="{% trans "Proteínas" %}">{{ nval.protein|floatformat:1 }}</td>
-      <td class="meal-value-{{ nval.fat|range_class:person.valid_fat }}" title="{% trans "Grasas" %}">{{ nval.fat|floatformat:1 }}</td>
+      <td>
+        {% include "meals/layout/meal_value.html" with value=nval.consumed_carbs range=person.valid_carbs is_free=meal.is_free only %}
+      </td>
+      <td>
+        {% include "meals/layout/meal_value.html" with value=nval.protein range=person.valid_proteins is_free=meal.is_free only %}
+      </td>
+      <td>
+        {% include "meals/layout/meal_value.html" with value=nval.fat range=person.valid_fat is_free=meal.is_free only %}
+      </td>
     </tr>
     </tbody>
   </table>
