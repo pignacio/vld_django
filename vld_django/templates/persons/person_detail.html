@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n utils_tags %}
 
 {% block title %}Persona - {{ person.name }}{% endblock title %}
 {% block page_title %}Persona - {{ person.name }}{% endblock page_title %}
@@ -16,7 +16,8 @@
   {% for meal, log in meals %}
   <li class="meal">
   <h4><a href="{% url "meals:detail" person.name meal.date %}">{{ meal.date|date:'M j, Y' }}</a></h4>
-  {{ log.nutritional_value.calories|floatformat:1 }} kCal
+  {% with nval=log.nutritional_value %}
+  <span class="meal-value-{{ nval.calories|range_class:person.valid_calories }}">{{ nval.calories|floatformat:1 }} kCal</span>
   <table class="table text-center meal-table">
     <tbody>
     <tr>
@@ -26,6 +27,7 @@
     </tr>
     </tbody>
   </table>
+  {% endwith %}
   </li>
   {% endfor %}
 </ul>
@@ -49,6 +51,18 @@ li.meal {
 
 .meal-table th {
   text-align: center;
+}
+
+.meal-value-danger {
+  color: red;
+}
+
+.meal-value-warning {
+  color: yellow;
+}
+
+.meal-value-ok {
+  color: lightgreen;
 }
 </style>
 {% endblock extra_css %}
