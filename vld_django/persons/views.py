@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 class PersonCreateView(LoginRequiredMixin, CreateView):
     model = Person
-    fields = ('name', 'default_meal_data')
+    fields = ('name', 'default_meal_data', 'valid_calories')
     template_name = 'persons/person_create.html'
 
     def get_success_url(self):
