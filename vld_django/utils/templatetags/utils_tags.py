@@ -35,3 +35,19 @@ def _resolve_request_path(request):
         return resolve(request.path_info)
     except Resolver404:
         return None
+
+
+@register.filter(name='range_class')
+def range_class(value, value_range, warning=10):
+    if value_range is None or value is None:
+        return 'none'
+    if value < value_range.lower * (100 - warning) / 100:
+        return 'danger'
+    elif value < value_range.lower:
+        return 'warning'
+    elif value < value_range.upper:
+        return 'ok'
+    elif value < value_range.upper * (100 + warning) / 100:
+        return 'warning'
+    else:
+        return 'danger'
