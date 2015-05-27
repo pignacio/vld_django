@@ -7,6 +7,7 @@
 {% block page_buttons %}
 <a href="{% url "meals:create" person.name %}" title="{% trans "Agregar comida" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
 <a href="{% url "persons:import" person.name %}" title="{% trans "Importar comidas" %}"><span class="glyphicon glyphicon-import icon-add"></span></a>
+<a href="{% url "persons:update" person.name %}" title="{% trans "Editar persona" %}"><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a>
 {% endblock page_buttons %}
 
 {% block content %}
