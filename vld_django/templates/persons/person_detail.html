@@ -23,7 +23,7 @@
     <tbody>
     <tr>
       <td>
-        {% include "meals/layout/meal_value.html" with value=nval.consumed_carbs range=person.valid_carbs is_free=meal.is_free title=_("Net Carbs") only %}
+        {% include "meals/layout/meal_value.html" with value=nval.net_carbs range=person.valid_carbs is_free=meal.is_free title=_("Carbs netos") only %}
       </td>
       <td>
         {% include "meals/layout/meal_value.html" with value=nval.protein range=person.valid_proteins is_free=meal.is_free title=_("Proteínas") only %}

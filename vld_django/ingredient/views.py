@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import ListView, CreateView, DetailView, FormView
 
-from var_log_dieta.objects import Ingredient as VldIngredient
+from vld.objects import Ingredient as VldIngredient
 
 from utils.views import LoginRequiredMixin
 from .forms import (IngredientForm, IngredientImportForm,

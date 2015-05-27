@@ -9,7 +9,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 
 from jsonfield import JSONField
-from var_log_dieta.objects import Ingredient as VldIngredient
+from vld.objects import Ingredient as VldIngredient
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 

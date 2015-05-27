@@ -5,8 +5,8 @@ from __future__ import absolute_import, unicode_literals, division
 import logging
 
 from unidecode import unidecode
-from var_log_dieta.commands.report import process_log
-from var_log_dieta.ingredient import IngredientMap
+from vld.commands.report import process_log
+from vld.ingredient import IngredientMap
 
 from ingredient.models import Ingredient
 
