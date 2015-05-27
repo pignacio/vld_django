@@ -57,6 +57,7 @@ function updateIngredientFinder(event) {
       });
   $('.ingredient-finder-result-name').click(function() {
       replaceCurrentTextareaLine(textarea, this.innerHTML);
+      textarea.focus();
       })
 }
 
