@@ -21,9 +21,9 @@
   <table class="table text-center meal-table">
     <tbody>
     <tr>
-      <td title="{% trans "Net carbs" %}">{{ log.nutritional_value.consumed_carbs|floatformat:1 }}</td>
-      <td title="{% trans "Proteínas" %}">{{ log.nutritional_value.protein|floatformat:1 }}</td>
-      <td title="{% trans "Grasas" %}">{{ log.nutritional_value.fat|floatformat:1 }}</td>
+      <td class="meal-value-{{ nval.consumed_carbs|range_class:person.valid_carbs }}" title="{% trans "Net carbs" %}">{{ nval.consumed_carbs|floatformat:1 }}</td>
+      <td class="meal-value-{{ nval.protein|range_class:person.valid_proteins }}" title="{% trans "Proteínas" %}">{{ nval.protein|floatformat:1 }}</td>
+      <td class="meal-value-{{ nval.fat|range_class:person.valid_fat }}" title="{% trans "Grasas" %}">{{ nval.fat|floatformat:1 }}</td>
     </tr>
     </tbody>
   </table>
