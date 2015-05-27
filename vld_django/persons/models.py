@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals, division
 
+import datetime
 import logging
 
 from django.core.urlresolvers import reverse
@@ -9,6 +10,8 @@ from django.db import models
 from django.utils.translation import ugettext as _
 
 from jsonfield import JSONField
+
+from meals.helper import process_meals
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -31,3 +34,23 @@ class Person(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def _list_all_meals(self, **kwargs):
+
+        model = self.meal_set.model
+        meals = self.meal_set.filter(**kwargs).reverse()
+        if not meals.exists():
+            meals = [model(person=self.object, date=datetime.date.today())]
+        by_date = {m.date: m for m in meals}
+        start = max(by_date)
+        end = min(by_date)
+        date = start
+        res = []
+        while date >= end:
+            res.append(by_date.get(date, model(person=self, date=date)))
+            date -= datetime.timedelta(days=1)
+        return res
+
+    def processed_meals(self, **filters):
+        meals = self._list_all_meals(**filters)
+        return process_meals(meals)

@@ -4,13 +4,13 @@ from __future__ import absolute_import, unicode_literals, division
 
 import logging
 
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from utils.views import LoginRequiredMixin
 from meals.models import Meal
-from meals.helper import trim_meals_data, process_meals
+from meals.helper import trim_meals_data
 from .models import Person
 from .forms import PersonImportForm, PersonUpdateForm
 
@@ -40,9 +40,7 @@ class PersonDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         res = super(PersonDetailView, self).get_context_data(*args, **kwargs)
-        meals = self.object.meal_set.all()
-        logs = process_meals(meals)
-        res['meals'] = [(meal, logs[meal]) for meal in meals]
+        res['meals'] = self.object.processed_meals()
         return res
 
 
