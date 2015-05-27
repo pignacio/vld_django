@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals, division
 
 import logging
 
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
@@ -37,6 +37,11 @@ class PersonUpdateView(LoginRequiredMixin, UpdateView):
 class PersonDetailView(LoginRequiredMixin, DetailView):
     model = Person
     pk_url_kwarg = 'person_name'
+
+    def get_context_data(self, *args, **kwargs):
+        res = super(PersonDetailView, self).get_context_data(*args, **kwargs)
+        res['meals'] = self.object.processed_meals()
+        return res
 
 
 class PersonImportView(LoginRequiredMixin, UpdateView):

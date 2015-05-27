@@ -55,11 +55,6 @@ class MealCreateView(MealViewMixin, CreateView):
 class MealDetailView(MealViewMixin, DetailView):
     model = Meal
 
-    def get_context_data(self, *args, **kwargs):
-        data = super(MealDetailView, self).get_context_data(*args, **kwargs)
-        data['log'] = process_meal(self.object)
-        return data
-
 
 class MealAddSectionView(MealViewMixin, UpdateView):
     model = Meal

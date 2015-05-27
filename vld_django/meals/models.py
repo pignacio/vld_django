@@ -10,6 +10,8 @@ from django.utils.translation import ugettext as _
 
 from jsonfield import JSONField
 
+from .helper import process_meal
+
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
@@ -36,3 +38,7 @@ class Meal(models.Model):
 
     def __unicode__(self):
         return "{}@{}".format(self.person, self.date)
+
+    def log(self):
+        return process_meal(self)
+

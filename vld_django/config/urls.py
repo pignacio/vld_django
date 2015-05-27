@@ -46,3 +46,7 @@ if settings.DEBUG:
         url(r"^static/(?P<path>.*)$", "django.views.static.serve", {"document_root": settings.STATIC_ROOT}),
     )  # yapf: disable
     urlpatterns += staticfiles_urlpatterns()
+
+
+if 'silk' in settings.INSTALLED_APPS:
+    urlpatterns += patterns('', url(r'^silk/', include('silk.urls', namespace='silk')))

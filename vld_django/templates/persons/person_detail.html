@@ -12,17 +12,44 @@
 {% block content %}
 
 <h2>{% trans "Comidas" %} </h2>
-{% if person.meal_set.exists %}
 <ul>
-  {% for meal in person.meal_set.all %}
-  <li><a href="{% url "meals:detail" person.name meal.date %}">{{ meal.date }}</a></li>
+  {% for meal, log in meals %}
+  <li class="meal">
+  <h4><a href="{% url "meals:detail" person.name meal.date %}">{{ meal.date|date:'M j, Y' }}</a></h4>
+  {{ log.nutritional_value.calories|floatformat:1 }} kCal
+  <table class="table text-center meal-table">
+    <tbody>
+    <tr>
+      <td title="{% trans "Net carbs" %}">{{ log.nutritional_value.consumed_carbs|floatformat:1 }}</td>
+      <td title="{% trans "Proteínas" %}">{{ log.nutritional_value.protein|floatformat:1 }}</td>
+      <td title="{% trans "Grasas" %}">{{ log.nutritional_value.fat|floatformat:1 }}</td>
+    </tr>
+    </tbody>
+  </table>
+  </li>
   {% endfor %}
 </ul>
-{% else %}
-<div class="jumbotron">{% trans "No hay comidas." %}</div>
-{% endif %}
 <div class="row">
   <a class="btn btn-primary pull-right" href="{% url "persons:list" %}">{% trans "Volver" %}</a>
 </div>
 {% endblock content %}
+
+{% block extra_css %}
+<style>
+li.meal {
+  list-style-type: none;
+  width: 13.5%;
+  height: 100px;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid #EBEBEB;
+  border-radius: 5px;
+  margin: 2px;
+}
+
+.meal-table th {
+  text-align: center;
+}
+</style>
+{% endblock extra_css %}
 {# vim: set ft=htmldjango :#}

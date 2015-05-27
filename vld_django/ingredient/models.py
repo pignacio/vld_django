@@ -41,3 +41,7 @@ class Ingredient(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @classmethod
+    def all_objects(cls):
+        return [i.as_object() for i in cls.objects.all()]

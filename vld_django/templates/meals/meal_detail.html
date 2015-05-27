@@ -10,11 +10,14 @@
 {% endblock page_buttons %}
 
 {% block content %}
+{% with log=meal.log %}
 {% include "meals/meal_log.html" %}
 <div class="row">
   <a class="btn btn-primary pull-right" href="{% url "persons:detail" meal.person.name %}">{% trans "Volver" %}</a>
 </div>
 <div class="jumbotron">{{ log }}</div>
 <div class="jumbotron">{{ meal.data }}</div>
+
+{% endwith %}
 {% endblock content %}
 {# vim: set ft=htmldjango :#}
