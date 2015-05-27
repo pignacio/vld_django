@@ -12,7 +12,6 @@
 {% block content %}
 
 <h2>{% trans "Comidas" %} </h2>
-{% if person.meal_set.exists %}
 <ul>
   {% for meal, log in meals %}
   <li class="meal">
@@ -30,9 +29,6 @@
   </li>
   {% endfor %}
 </ul>
-{% else %}
-<div class="jumbotron">{% trans "No hay comidas." %}</div>
-{% endif %}
 <div class="row">
   <a class="btn btn-primary pull-right" href="{% url "persons:list" %}">{% trans "Volver" %}</a>
 </div>
