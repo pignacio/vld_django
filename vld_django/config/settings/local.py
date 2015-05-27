@@ -73,3 +73,12 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 ########## END TOOLBAR CONFIGURATION
+
+
+########## SILK CONFIGURATION
+INSTALLED_APPS += ('silk', )
+
+SILKY_PYTHON_PROFILER = True
+
+MIDDLEWARE_CLASSES += ('silk.middleware.SilkyMiddleware',)
+########## END SILK CONFIGURATION
