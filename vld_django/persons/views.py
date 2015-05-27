@@ -10,7 +10,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from utils.views import LoginRequiredMixin
 from meals.models import Meal
-from meals.helper import trim_meals_data
+from meals.helper import trim_meals_data, process_meals
 from .models import Person
 from .forms import PersonImportForm, PersonUpdateForm
 
@@ -37,6 +37,13 @@ class PersonUpdateView(LoginRequiredMixin, UpdateView):
 class PersonDetailView(LoginRequiredMixin, DetailView):
     model = Person
     pk_url_kwarg = 'person_name'
+
+    def get_context_data(self, *args, **kwargs):
+        res = super(PersonDetailView, self).get_context_data(*args, **kwargs)
+        meals = self.object.meal_set.all()
+        logs = process_meals(meals)
+        res['meals'] = [(meal, logs[meal]) for meal in meals]
+        return res
 
 
 class PersonImportView(LoginRequiredMixin, UpdateView):
