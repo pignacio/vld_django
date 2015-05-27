@@ -14,13 +14,26 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
 def process_meal(meal):
-    return process_meal_data(meal.date.strftime('%F'), meal.data)
+    return process_meals([meal])[meal]
+
+
+def process_meals(meals):
+    logs = process_meal_datas(
+        {meal.date.strftime('%F'): meal.data
+         for meal in meals})
+    return {meal: logs[meal.date.strftime('%F')] for meal in meals}
 
 
 def process_meal_data(name, data):
-    ingredients = IngredientMap([x.as_object()
-                                 for x in Ingredient.objects.all()])
-    return process_log(name, data, ingredients)
+    return process_meal_datas({name: data})[name]
+
+
+def process_meal_datas(datas):
+    ingredients = IngredientMap(Ingredient.all_objects())
+    return {
+        name: process_log(name, data, ingredients)
+        for name, data in datas.items()
+    }
 
 
 def trim_meals_data(data):
@@ -40,9 +53,8 @@ def trim_meals_data(data):
 
 
 def get_ingredients_data():
-    ingredients = [i.as_object() for i in Ingredient.objects.all()]
     ingredients = [{'name': unidecode(i.name),
-                    'units': _get_units(i)} for i in ingredients]
+                    'units': _get_units(i)} for i in Ingredient.all_objects()]
     return ingredients
 
 
