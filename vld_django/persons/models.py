@@ -21,6 +21,9 @@ class Person(models.Model):
     name = models.CharField(_('Nombre'), max_length=255, primary_key=True)
     default_meal_data = JSONField(_('Comida por defecto'))
     valid_calories = FloatRangeField(_('Calorías válidas'), null=True)
+    valid_carbs = FloatRangeField(_('Carbs válidos'), null=True)
+    valid_proteins = FloatRangeField(_('Proteínas válidas'), null=True)
+    valid_fat = FloatRangeField(_('Grasas válidas'), null=True)
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -38,7 +41,6 @@ class Person(models.Model):
         return self.name
 
     def _list_all_meals(self, **kwargs):
-
         model = self.meal_set.model
         meals = self.meal_set.filter(**kwargs).reverse()
         if not meals.exists():

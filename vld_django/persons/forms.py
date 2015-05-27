@@ -55,7 +55,13 @@ class PersonImportForm(forms.Form):
 class PersonUpdateForm(forms.ModelForm):
     class Meta(object):
         model = Person
-        fields = ('default_meal_data', 'valid_calories', )
+        fields = (
+            'default_meal_data',
+            'valid_calories',
+            'valid_carbs',
+            'valid_proteins',
+            'valid_fat',
+        )  # yapf: disable
 
     def __init__(self, *args, **kwargs):
         super(PersonUpdateForm, self).__init__(*args, **kwargs)
@@ -63,6 +69,9 @@ class PersonUpdateForm(forms.ModelForm):
         self.helper.layout = Layout(
             'default_meal_data',
             'valid_calories',
+            'valid_carbs',
+            'valid_proteins',
+            'valid_fat',
             FormActions(
                 Submit('submit', _('Guardar'),
                        css_class='btn-primary pull-right',
