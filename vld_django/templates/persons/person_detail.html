@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n utils_tags %}
 
 {% block title %}Persona - {{ person.name }}{% endblock title %}
 {% block page_title %}Persona - {{ person.name }}{% endblock page_title %}
@@ -16,16 +16,24 @@
   {% for meal, log in meals %}
   <li class="meal">
   <h4><a href="{% url "meals:detail" person.name meal.date %}">{{ meal.date|date:'M j, Y' }}</a></h4>
-  {{ log.nutritional_value.calories|floatformat:1 }} kCal
+  {% with nval=log.nutritional_value %}
+  {% include "meals/layout/meal_value.html" with value=nval.calories range=person.valid_calories is_free=meal.is_free unit="kCal" only %}
   <table class="table text-center meal-table">
     <tbody>
     <tr>
-      <td title="{% trans "Net carbs" %}">{{ log.nutritional_value.consumed_carbs|floatformat:1 }}</td>
-      <td title="{% trans "Proteínas" %}">{{ log.nutritional_value.protein|floatformat:1 }}</td>
-      <td title="{% trans "Grasas" %}">{{ log.nutritional_value.fat|floatformat:1 }}</td>
+      <td>
+        {% include "meals/layout/meal_value.html" with value=nval.consumed_carbs range=person.valid_carbs is_free=meal.is_free only %}
+      </td>
+      <td>
+        {% include "meals/layout/meal_value.html" with value=nval.protein range=person.valid_proteins is_free=meal.is_free only %}
+      </td>
+      <td>
+        {% include "meals/layout/meal_value.html" with value=nval.fat range=person.valid_fat is_free=meal.is_free only %}
+      </td>
     </tr>
     </tbody>
   </table>
+  {% endwith %}
   </li>
   {% endfor %}
 </ul>
@@ -49,6 +57,18 @@ li.meal {
 
 .meal-table th {
   text-align: center;
+}
+
+.meal-value-danger {
+  color: red;
+}
+
+.meal-value-warning {
+  color: yellow;
+}
+
+.meal-value-ok {
+  color: lightgreen;
 }
 </style>
 {% endblock extra_css %}

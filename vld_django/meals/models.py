@@ -19,6 +19,7 @@ class Meal(models.Model):
     person = models.ForeignKey('persons.Person')
     date = models.DateField(_('Fecha'))
     data = JSONField()
+    is_free = models.BooleanField(_('Es día libre?'), default=False)
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)

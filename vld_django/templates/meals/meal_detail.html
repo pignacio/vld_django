@@ -6,10 +6,20 @@
 
 {% block page_buttons %}
 <a href="{% url "meals:detail" meal.person prev_meal_date %}" title="{% trans "Comida anterior" %}"><span class="glyphicon glyphicon-arrow-left icon-add"></span></a>
-<a href="{% url "meals:detail" meal.person next_meal_date %}" title="{% trans "Comida anterior" %}"><span class="glyphicon glyphicon-arrow-right icon-add"></span></a>
+<a href="{% url "meals:detail" meal.person next_meal_date %}" title="{% trans "Comida siguiente" %}"><span class="glyphicon glyphicon-arrow-right icon-add"></span></a>
 {% endblock page_buttons %}
 
 {% block content %}
+
+<div class="alert alert-info">
+{% if meal.is_free %}
+{% trans "Este día fue libre." %}
+{% else %}
+{% trans "Este día no fue libre." %}
+{% endif %}
+<a class="btn btn-primary btn-xs" href="{% url "meals:toggle_free" meal.person.name meal.date %}">Cambiar</a>
+</div>
+
 {% with log=meal.log %}
 {% include "meals/meal_log.html" %}
 <div class="row">

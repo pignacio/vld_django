@@ -120,6 +120,15 @@ class MealEditSectionView(MealViewMixin, UpdateView):
         return redirect(self.object.get_absolute_url())
 
 
+def meal_toggle_free(request, person_name, date):
+    person = get_object_or_404(Person, name=person_name)
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    meal, _created = Meal.objects.get_or_create(person=person, date=date)
+    meal.is_free = not meal.is_free
+    meal.save()
+    return redirect(meal.get_absolute_url())
+
+
 @csrf_exempt
 def meal_counter(request):
     log = None

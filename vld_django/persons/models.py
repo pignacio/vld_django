@@ -5,6 +5,7 @@ from __future__ import absolute_import, unicode_literals, division
 import datetime
 import logging
 
+from django.contrib.postgres.fields import FloatRangeField
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext as _
@@ -19,6 +20,10 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 class Person(models.Model):
     name = models.CharField(_('Nombre'), max_length=255, primary_key=True)
     default_meal_data = JSONField(_('Comida por defecto'))
+    valid_calories = FloatRangeField(_('Calorías válidas'), null=True, blank=True)
+    valid_carbs = FloatRangeField(_('Carbs válidos'), null=True, blank=True)
+    valid_proteins = FloatRangeField(_('Proteínas válidas'), null=True, blank=True)
+    valid_fat = FloatRangeField(_('Grasas válidas'), null=True, blank=True)
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -36,7 +41,6 @@ class Person(models.Model):
         return self.name
 
     def _list_all_meals(self, **kwargs):
-
         model = self.meal_set.model
         meals = self.meal_set.filter(**kwargs).reverse()
         if not meals.exists():
