@@ -61,17 +61,19 @@ class PersonUpdateForm(forms.ModelForm):
             'valid_carbs',
             'valid_proteins',
             'valid_fat',
+            'timezone',
         )  # yapf: disable
 
     def __init__(self, *args, **kwargs):
         super(PersonUpdateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            'default_meal_data',
+            'timezone',
             'valid_calories',
             'valid_carbs',
             'valid_proteins',
             'valid_fat',
+            'default_meal_data',
             FormActions(
                 Submit('submit', _('Guardar'),
                        css_class='btn-primary pull-right',

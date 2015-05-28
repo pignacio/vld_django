@@ -21,11 +21,12 @@ class PersonCreateView(LoginRequiredMixin, CreateView):
     model = Person
     fields = (
         'name',
-        'default_meal_data',
+        'timezone',
         'valid_calories',
         'valid_carbs',
         'valid_proteins',
         'valid_fat',
+        'default_meal_data',
     )  # yapf: disable
     template_name = 'persons/person_create.html'
 

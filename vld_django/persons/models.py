@@ -11,6 +11,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 
 from jsonfield import JSONField
+import pytz
 
 from meals.helper import process_meals
 
@@ -24,6 +25,9 @@ class Person(models.Model):
     valid_carbs = FloatRangeField(_('Carbs válidos'), null=True, blank=True)
     valid_proteins = FloatRangeField(_('Proteínas válidas'), null=True, blank=True)
     valid_fat = FloatRangeField(_('Grasas válidas'), null=True, blank=True)
+    timezone = models.CharField(_('Timezone'),
+                                choices=[(tz, tz) for tz in pytz.all_timezones],
+                                max_length=255, default='UTC')
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
