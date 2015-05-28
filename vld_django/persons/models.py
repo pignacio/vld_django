@@ -40,12 +40,18 @@ class Person(models.Model):
     def __unicode__(self):
         return self.name
 
-    def _list_all_meals(self, **kwargs):
+    def _list_all_meals(self, start_date=None):
         model = self.meal_set.model
-        meals = self.meal_set.filter(**kwargs).reverse()
-        if not meals.exists():
-            meals = [model(person=self.object, date=datetime.date.today())]
+        meals = self.meal_set.all()
+        if start_date:
+            meals = meals.filter(date__gte=start_date)
+        meals = meals.reverse()
+
         by_date = {m.date: m for m in meals}
+        today = self.today_date()
+        if not today in by_date:
+            by_date[today] = model(person=self, date=today)
+
         start = max(by_date)
         end = min(by_date)
         date = start
@@ -55,6 +61,9 @@ class Person(models.Model):
             date -= datetime.timedelta(days=1)
         return res
 
-    def processed_meals(self, **filters):
-        meals = self._list_all_meals(**filters)
+    def processed_meals(self):
+        meals = self._list_all_meals()
         return process_meals(meals)
+
+    def today_date(self):
+        return datetime.date.today()
