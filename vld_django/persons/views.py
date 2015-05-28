@@ -3,17 +3,20 @@
 from __future__ import absolute_import, unicode_literals, division
 
 import datetime
+import json
 import logging
 
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
-from django.views.generic import ListView, DetailView, UpdateView, CreateView, FormView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView
 
 from utils.views import LoginRequiredMixin
 from meals.models import Meal
 from meals.helper import trim_meals_data
+from .helper import make_charts
 from .models import Person
-from .forms import PersonImportForm, PersonUpdateForm, PersonCreateValueForm, PersonValuesSelectDatesForm, PersonAddValuesForm
+from .forms import (PersonImportForm, PersonUpdateForm, PersonCreateValueForm,
+                    PersonValuesSelectDatesForm, PersonAddValuesForm)
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -32,8 +35,7 @@ class PersonCreateView(LoginRequiredMixin, CreateView):
     template_name = 'persons/person_create.html'
 
     def get_success_url(self):
-        return reverse('persons:detail',
-                       kwargs={'person_name': self.object.name})
+        return reverse('persons:detail', kwargs={'person_name': self.object.name})
 
 
 class PersonUpdateView(LoginRequiredMixin, UpdateView):
@@ -79,6 +81,15 @@ class PersonValuesView(LoginRequiredMixin, DetailView):
     model = Person
     pk_url_kwarg = 'person_name'
     template_name_suffix = '_values'
+
+    def get_context_data(self, *args, **kwargs):
+        res = super(PersonValuesView, self).get_context_data(*args, **kwargs)
+        start = self.object.meal_set.order_by('date')[0].date
+        end = datetime.date.today()
+        res['charts'] = [c._replace(options=json.dumps(c.options),
+                                    rows=json.dumps(c.rows))
+                         for c in make_charts(self.object, start, end)]
+        return res
 
 
 class PersonCreateValueView(LoginRequiredMixin, UpdateView):

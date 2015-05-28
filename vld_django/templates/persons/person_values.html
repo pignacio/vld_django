@@ -10,18 +10,51 @@
 {% endblock page_buttons %}
 
 {% block content %}
+<ul class="nav nav-pills nav-stacked">
+  <li><a href="{% url "persons:create_value" person.name %}">{% trans "Agregar valor nuevo" %}</a></li>
 {% if person.values %}
-<ul>
-  {% for value in person.values %}
-  <li>{{ value }}</li>
-  {% endfor %}
-</ul>
-{% else %}
-<div class="jumbotron">{% trans "No hay valores." %}</div>
+  <li><a href="{% url "persons:select_date" person.name %}">{% trans "Agregar valores" %}</a></li>
 {% endif %}
+</ul>
+
+{% for chart in charts %}
+<div id='chart-{{ forloop.counter }}'></div>
+{% endfor %}
+
 <div class="row">
   <a class="btn btn-primary pull-right" href="{% url "persons:detail"  person.name %}">{% trans "Volver" %}</a>
 </div>
 {% endblock content %}
+
+
+{% block extra_js %}
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript" charset="utf-8">
+
+google.load('visualization', '1.1', {packages: ['line', 'corechart']});
+google.setOnLoadCallback(drawCharts);
+
+function drawCharts() {
+  {% for chart in charts %}
+  var data = new google.visualization.DataTable();
+
+  {% for type, name in chart.columns %}
+  data.addColumn('{{ type|escapejs }}', '{{ name|escapejs }}');
+  {% endfor %}
+
+  data.addRows({{ chart.rows|safe }});
+
+  var options = {{ chart.options|safe }};
+
+  var div = document.getElementById('chart-{{ forloop.counter }}');
+
+  var chart = new google.charts.Line(div);
+  chart.draw(data, options);
+
+  {% endfor %}
+}
+
+</script>
+{% endblock extra_js %}
 
 {# vim: set ft=htmldjango :#}
