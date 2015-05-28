@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_tags %}
+
+{% block title %}
+{% blocktrans with name=person.name %}
+Agregar valor a {{ name }}
+{% endblocktrans %}
+{% endblock title %}
+
+{% block page_title %}
+{% blocktrans with name=person.name %}
+Agregar valor a {{ name }}
+{% endblocktrans %}
+{% endblock page_title %}
+
+{% block content %}
+{% crispy form %}
+{% endblock content %}
+
+{# vim: set ft=htmldjango :#}

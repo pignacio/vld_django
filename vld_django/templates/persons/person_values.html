@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n utils_tags %}
+
+{% block title %}Persona - {{ person.name }} - {% trans "Valores" %}{% endblock title %}
+{% block page_title %}Persona - {{ person.name }} - {% trans "Valores" %}{% endblock page_title %}
+
+{% block page_buttons %}
+<a href="{% url "persons:create_value" person.name %}" title="{% trans "Agregar valor nuevo" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
+<a href="{% url "persons:select_date" person.name %}" title="{% trans "Agregar valores" %}"><span class="glyphicon glyphicon-import icon-add"></span></a>
+{% endblock page_buttons %}
+
+{% block content %}
+{% if person.values %}
+<ul>
+  {% for value in person.values %}
+  <li>{{ value }}</li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="jumbotron">{% trans "No hay valores." %}</div>
+{% endif %}
+<div class="row">
+  <a class="btn btn-primary pull-right" href="{% url "persons:detail"  person.name %}">{% trans "Volver" %}</a>
+</div>
+{% endblock content %}
+
+{# vim: set ft=htmldjango :#}
