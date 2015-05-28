@@ -37,17 +37,27 @@ def _resolve_request_path(request):
         return None
 
 
+_STATUSES = ['none', 'ok', 'warning', 'danger']
+
+
 @register.filter(name='range_class')
 def range_class(value, value_range, warning=10):
     if value_range is None or value is None:
         return 'none'
-    if value < value_range.lower * (100 - warning) / 100:
-        return 'danger'
-    elif value < value_range.lower:
-        return 'warning'
-    elif value < value_range.upper:
-        return 'ok'
-    elif value < value_range.upper * (100 + warning) / 100:
-        return 'warning'
-    else:
-        return 'danger'
+    status_id = 0
+    if value_range.lower is not None:
+        if value < value_range.lower * (100 - warning) / 100:
+            status_id = max(status_id, 3)
+        elif value < value_range.lower:
+            status_id = max(status_id, 2)
+        else:
+            status_id = max(status_id, 1)
+    if value_range.upper is not None:
+        if value < value_range.upper:
+            status_id = max(status_id, 1)
+        elif value < value_range.upper * (100 + warning) / 100:
+            status_id = max(status_id, 2)
+        else:
+            status_id = max(status_id, 3)
+
+    return _STATUSES[status_id]
