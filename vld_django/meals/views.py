@@ -35,8 +35,9 @@ class MealViewMixin(LoginRequiredMixin):
 
     def get_context_data(self, *args, **kwargs):
         res = super(MealViewMixin, self).get_context_data(*args, **kwargs)
-        res['next_meal_date'] = self.object.date + datetime.timedelta(1)
-        res['prev_meal_date'] = self.object.date - datetime.timedelta(1)
+        if self.object:
+            res['next_meal_date'] = self.object.date + datetime.timedelta(1)
+            res['prev_meal_date'] = self.object.date - datetime.timedelta(1)
         return res
 
 
