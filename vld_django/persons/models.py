@@ -53,7 +53,7 @@ class Person(models.Model):
 
         by_date = {m.date: m for m in meals}
         today = self.today_date()
-        if not today in by_date:
+        if today not in by_date:
             by_date[today] = model(person=self, date=today)
 
         start = max(by_date)
@@ -70,4 +70,7 @@ class Person(models.Model):
         return process_meals(meals)
 
     def today_date(self):
-        return datetime.date.today()
+        now = datetime.datetime.now()
+        utc_now = pytz.utc.localize(now)
+        tz_now = utc_now.astimezone(pytz.timezone(self.timezone))
+        return tz_now.date()
