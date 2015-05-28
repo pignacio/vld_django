@@ -21,7 +21,7 @@
 
 .ingredient-finder-panel {
   height: 300px;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .ingredient-finder-panel>li{
@@ -31,4 +31,9 @@
 .ingredient-finder-result-name {
   font-weight: bold;
   font-size: larger;
+}
+
+.ingredient-finder-result:hover {
+  background-color: coral;
+  color: #2B3E50;
 }

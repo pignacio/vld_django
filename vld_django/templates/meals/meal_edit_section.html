@@ -53,10 +53,13 @@ function updateIngredientFinder(event) {
     return;
   results = fuse.search(search);
   $.each(results, function() {
-      results_div.append('<li><span class="ingredient-finder-result-name">' + this.name + '</span><br /><span class="ingredient-finder-result-units">{% trans "Unidades" %}: ' + this.units + '</span></li>')
+      var item = $('<li>', {class: 'ingredient-finder-result', value: this.name});
+      item.append('<span class="ingredient-finder-result-name">' + this.name + '</span><br /><span class="ingredient-finder-result-units">{% trans "Unidades" %}: ' + this.units + '</span>')
+      results_div.append(item);
       });
-  $('.ingredient-finder-result-name').click(function() {
-      replaceCurrentTextareaLine(textarea, this.innerHTML);
+
+  $('.ingredient-finder-result').click(function() {
+      replaceCurrentTextareaLine(textarea, $(this).attr('value'));
       textarea.focus();
       })
 }
@@ -90,7 +93,7 @@ function replaceCurrentTextareaLine(textarea, line) {
   if (line_split.length == 1)
     line_split.push(' ');
   lines[count] = line_split.join(',')
-  var position = 0;
+    var position = 0;
   for (i=0; i <= count; i++) {
     position += lines[i].length + 1;
   }
@@ -113,5 +116,4 @@ $(document).ready(function() {
     })
 </script>
 {% endblock extra_js %}
-
 {# vim: set ft=htmldjango :#}
