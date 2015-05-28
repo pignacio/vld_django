@@ -51,3 +51,6 @@ docs/_build/
 
 # But enable root bin
 !/bin
+
+# Issue2branch config file
+.issue2branch.config
