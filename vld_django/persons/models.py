@@ -11,6 +11,7 @@ from django.db import models
 from django.utils.translation import ugettext as _
 
 from jsonfield import JSONField
+import pytz
 
 from meals.helper import process_meals
 
@@ -24,6 +25,9 @@ class Person(models.Model):
     valid_carbs = FloatRangeField(_('Carbs válidos'), null=True, blank=True)
     valid_proteins = FloatRangeField(_('Proteínas válidas'), null=True, blank=True)
     valid_fat = FloatRangeField(_('Grasas válidas'), null=True, blank=True)
+    timezone = models.CharField(_('Timezone'),
+                                choices=[(tz, tz) for tz in pytz.all_timezones],
+                                max_length=255, default='UTC')
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
@@ -40,12 +44,18 @@ class Person(models.Model):
     def __unicode__(self):
         return self.name
 
-    def _list_all_meals(self, **kwargs):
+    def _list_all_meals(self, start_date=None):
         model = self.meal_set.model
-        meals = self.meal_set.filter(**kwargs).reverse()
-        if not meals.exists():
-            meals = [model(person=self.object, date=datetime.date.today())]
+        meals = self.meal_set.all()
+        if start_date:
+            meals = meals.filter(date__gte=start_date)
+        meals = meals.reverse()
+
         by_date = {m.date: m for m in meals}
+        today = self.today_date()
+        if today not in by_date:
+            by_date[today] = model(person=self, date=today)
+
         start = max(by_date)
         end = min(by_date)
         date = start
@@ -55,6 +65,12 @@ class Person(models.Model):
             date -= datetime.timedelta(days=1)
         return res
 
-    def processed_meals(self, **filters):
-        meals = self._list_all_meals(**filters)
+    def processed_meals(self):
+        meals = self._list_all_meals()
         return process_meals(meals)
+
+    def today_date(self):
+        now = datetime.datetime.now()
+        utc_now = pytz.utc.localize(now)
+        tz_now = utc_now.astimezone(pytz.timezone(self.timezone))
+        return tz_now.date()
