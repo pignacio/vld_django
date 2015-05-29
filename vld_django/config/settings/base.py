@@ -277,3 +277,11 @@ TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 ########## LOGIN URL CONFIGURATION
 LOGIN_URL = 'web:login'
 ########## ENDLOGIN URL CONFIGURATION
+
+
+########## DB FILE STORAGE CONFIGURATION
+INSTALLED_APPS += ('db_file_storage',)
+
+DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
+########## END DB FILE STORAGE CONFIGURATION
+
