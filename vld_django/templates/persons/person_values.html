@@ -48,7 +48,7 @@ function drawCharts() {
 
   var div = document.getElementById('chart-{{ forloop.counter }}');
 
-  var chart = new google.charts.Line(div);
+  var chart = new google.visualization.LineChart(div);
   chart.draw(data, options);
 
   {% endfor %}

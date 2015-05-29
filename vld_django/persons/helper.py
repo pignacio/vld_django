@@ -25,19 +25,24 @@ def make_chart(chart_def, start, end, values, logs):
     options = {
         'width': 900,
         'height': 500,
-        'axes': {
-            'y': {}
+        'vAxes': {
         },
         'series': {
         }
     }  # yapf: disable
 
+    vAxes = []
+
     columns = [('string', 'Date')]
 
     for i, value_def in enumerate(chart_def['values']):
         axis = value_def['axis']
-        options['axes']['y'][axis] = {'label': axis}
-        options['series'][i] = {'axis': axis}
+        if not axis in vAxes:
+            vAxes.append(axis)
+        index = vAxes.index(axis)
+
+        options['vAxes'][index] = {'title': axis, }
+        options['series'][i] = {'targetAxisIndex': index}
         columns.append(('number', value_def['value']))
 
     rows = []
@@ -55,7 +60,7 @@ def make_chart(chart_def, start, end, values, logs):
                     value = None
             else:
                 value = values.get(value_name, {}).get(date_str, None)
-            row.append(value)
+            row.append(round(value, 1) if value else value)
         rows.append(row)
         date += datetime.timedelta(days=1)
 
