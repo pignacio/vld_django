@@ -32,10 +32,7 @@ class Meal(models.Model):
         ordering = ('person', 'date', )
 
     def get_absolute_url(self):
-        return reverse(
-            'meals:detail',
-            kwargs={'person_name': self.person.name,
-                    'date': self.date})
+        return reverse('meals:detail', kwargs={'person_name': self.person.name, 'date': self.date})
 
     def __unicode__(self):
         return "{}@{}".format(self.person, self.date)
@@ -43,3 +40,23 @@ class Meal(models.Model):
     def log(self):
         return process_meal(self)
 
+
+class MealPhoto(models.Model):
+    image = models.ImageField(upload_to='meals.MealPhotoData/bytes/filename/mimetype')
+    meal = models.ForeignKey(Meal, related_name='photos')
+    path = models.CharField(max_length=255, db_index=True)
+
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta(object):  # pylint: disable=too-few-public-methods
+        db_table = 'meal_screenshot'
+        verbose_name = 'meal screenshot'
+        verbose_name_plural = 'meal screenshots'
+        ordering = ('path', )
+
+
+class MealPhotoData(models.Model):
+    bytes = models.TextField()
+    filename = models.CharField(max_length=255)
+    mimetype = models.CharField(max_length=50)
