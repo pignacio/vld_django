@@ -12,9 +12,9 @@
 
 {% block content %}
 
-<li class="nav nav-pills nav-stacked">
-  <li><a href="{% url "persons:values" person.name %}">{% trans "Valores" %}</a></li>
-</li>
+<ul class="nav nav-pills nav-stacked">
+  <li><a href="{% url "persons:values" person.name %}">{% trans "Estadísticas" %}</a></li>
+</ul>
 
 <h2>{% trans "Comidas" %} </h2>
 <ul>
