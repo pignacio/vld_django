@@ -12,22 +12,49 @@
 {% block content %}
 
 <div class="alert alert-info">
-{% if meal.is_free %}
-{% trans "Este día fue libre." %}
-{% else %}
-{% trans "Este día no fue libre." %}
-{% endif %}
-<a class="btn btn-primary btn-xs" href="{% url "meals:toggle_free" meal.person.name meal.date %}">Cambiar</a>
+  {% if meal.is_free %}
+  {% trans "Este día fue libre." %}
+  {% else %}
+  {% trans "Este día no fue libre." %}
+  {% endif %}
+  <a class="btn btn-primary btn-xs" href="{% url "meals:toggle_free" meal.person.name meal.date %}">Cambiar</a>
 </div>
 
 {% with log=meal.log %}
 {% include "meals/meal_log.html" %}
-<div class="row">
+{% endwith %}
+<div class="btn-toolbar">
   <a class="btn btn-primary pull-right" href="{% url "persons:detail" meal.person.name %}">{% trans "Volver" %}</a>
 </div>
-<div class="jumbotron">{{ log }}</div>
-<div class="jumbotron">{{ meal.data }}</div>
 
-{% endwith %}
+{% if meal.photos.exists %}
+<ul class='meal-photo-list'>
+  {% for photo in meal.photos.all %}
+  <li><img src="{{ photo.image.url }}" /></li>
+  {% endfor %}
+</ul>
+{% else %}
+<div class="jumbotron" style='margin-top:20px;'>{% trans "No hay fotos para este día." %}</div>
+{% endif %}
+
 {% endblock content %}
+
+{% block extra_css %}
+<style>
+.meal-photo-list li {
+  list-style-type: none;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #EBEBEB;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+.meal-photo-list li img {
+  margin:auto;
+  max-width: 95%;
+  max-height: 95%;
+}
+</style>
+{% endblock extra_css %}
 {# vim: set ft=htmldjango :#}

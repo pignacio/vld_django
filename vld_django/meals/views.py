@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+# pylint: disable=too-many-ancestors
 from __future__ import absolute_import, unicode_literals, division
 
 import datetime
 import json
 import logging
 
-from django.shortcuts import get_object_or_404, redirect
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import (DetailView, RedirectView, CreateView,
-                                  UpdateView)
+from django.views.generic import DetailView, CreateView, UpdateView
 
 from utils.views import LoginRequiredMixin
 from persons.models import Person
-from .forms import MealCreateForm, MealAddSectionForm, MealEditSectionForm
-from .helper import process_meal_data, process_meal, get_ingredients_data
-from .models import Meal
+from .forms import MealCreateForm, MealAddSectionForm, MealEditSectionForm, MealPhotoCreateForm
+from .helper import process_meal_data, get_ingredients_data
+from .models import Meal, MealPhoto
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -121,7 +121,7 @@ class MealEditSectionView(MealViewMixin, UpdateView):
         return redirect(self.object.get_absolute_url())
 
 
-def meal_toggle_free(request, person_name, date):
+def meal_toggle_free(_request, person_name, date):
     person = get_object_or_404(Person, name=person_name)
     date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
     meal, _created = Meal.objects.get_or_create(person=person, date=date)
@@ -140,3 +140,23 @@ def meal_counter(request):
         log = process_meal_data(
             'TOTAL', {'__init__': form.cleaned_data['ingredients']})
     return render(request, 'meals/meal_log.html', {'log': log, })
+
+
+class MealCreatePhotoView(LoginRequiredMixin, CreateView):
+    model = MealPhoto
+    form_class = MealPhotoCreateForm
+    template_name_suffix = '_create'
+
+    def get_form_kwargs(self, *args, **kwargs):
+        res = super(MealCreatePhotoView, self).get_form_kwargs(*args, **kwargs)
+        person = get_object_or_404(Person, name=self.kwargs['person_name'])
+        date = datetime.datetime.strptime(self.kwargs['date'], '%Y-%m-%d').date()
+        meal, _created = Meal.objects.get_or_create(person=person,
+                                                    date=date,
+                                                    defaults={'data': person.default_meal_data})
+        res['instance'] = self.model(meal=meal, path=self.kwargs['path'])
+
+        return res
+
+    def get_success_url(self):
+        return self.object.meal.get_absolute_url()

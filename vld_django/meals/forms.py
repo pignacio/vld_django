@@ -11,7 +11,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Button
 import floppyforms.__future__ as forms
 
-from .models import Meal
+from .models import Meal, MealPhoto
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
@@ -81,3 +81,19 @@ class MealEditSectionForm(forms.Form):
         if data:
             return [l.strip() for l in data.split('\n')]
         return data
+
+
+class MealPhotoCreateForm(forms.ModelForm):
+    class Meta(object):
+        model = MealPhoto
+        fields = ('image',)
+
+    def __init__(self, *args, **kwargs):
+        super(MealPhotoCreateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            'image',
+            FormActions(Submit('submit', _('Agregar'),
+                               css_class='btn-primary pull-right',
+                               data_loading_text=_('Agregando...')), )
+        )  # yapf: disable
