@@ -5,13 +5,13 @@
 {% block page_title %}Persona - {{ person.name }} - {% trans "Valores" %}{% endblock page_title %}
 
 {% block page_buttons %}
-<a href="{% url "persons:create_value" person.name %}" title="{% trans "Agregar valor nuevo" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
+<a href="{% url "persons:create_value" person.name %}" title="{% trans "Agregar dato nuevo" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
 <a href="{% url "persons:select_date" person.name %}" title="{% trans "Agregar valores" %}"><span class="glyphicon glyphicon-import icon-add"></span></a>
 {% endblock page_buttons %}
 
 {% block content %}
 <ul class="nav nav-pills nav-stacked">
-  <li><a href="{% url "persons:create_value" person.name %}">{% trans "Agregar valor nuevo" %}</a></li>
+  <li><a href="{% url "persons:create_value" person.name %}">{% trans "Agregar dato nuevo" %}</a></li>
 {% if person.values %}
   <li><a href="{% url "persons:select_date" person.name %}">{% trans "Agregar valores" %}</a></li>
 {% endif %}
