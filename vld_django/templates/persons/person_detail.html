@@ -24,6 +24,9 @@
     <h4>{{ meal.date|date:'M j, Y' }}</h4>
     {% with nval=log.nutritional_value %}
     {% include "meals/layout/meal_value.html" with value=nval.calories range=person.valid_calories is_free=meal.is_free unit="kCal" only %}
+    <div class="meal-fiber">
+      {% include "meals/layout/meal_value.html" with value=nval.fiber range=person.valid_fiber is_free=meal.is_free unit=_("g fibra") only %}
+    </div>
     <table class="table text-center meal-table">
       <tbody>
       <tr>
@@ -54,7 +57,7 @@
 li.meal {
   list-style-type: none;
   width: 150px;
-  height: 100px;
+  height: 120px;
   display: inline-block;
   text-align: center;
   border: 1px solid #EBEBEB;
@@ -64,6 +67,10 @@ li.meal {
 
 .meal .meal-value {
   font-weight: bold;
+}
+
+.meal .meal-fiber {
+  font-size: smaller;
 }
 
 .meal a {

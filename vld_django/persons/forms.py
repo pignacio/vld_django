@@ -58,6 +58,7 @@ class PersonUpdateForm(forms.ModelForm):
             'valid_carbs',
             'valid_proteins',
             'valid_fat',
+            'valid_fiber',
             'charts',
             'timezone',
         )  # yapf: disable
@@ -71,6 +72,7 @@ class PersonUpdateForm(forms.ModelForm):
             'valid_carbs',
             'valid_proteins',
             'valid_fat',
+            'valid_fiber',
             'charts',
             'default_meal_data',
             FormActions(

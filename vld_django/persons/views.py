@@ -30,6 +30,7 @@ class PersonCreateView(LoginRequiredMixin, CreateView):
         'valid_carbs',
         'valid_proteins',
         'valid_fat',
+        'valid_fiber',
         'default_meal_data',
     )  # yapf: disable
     template_name = 'persons/person_create.html'

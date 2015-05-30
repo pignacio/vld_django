@@ -25,6 +25,7 @@ class Person(models.Model):
     valid_carbs = FloatRangeField(_('Carbs válidos'), null=True, blank=True)
     valid_proteins = FloatRangeField(_('Proteínas válidas'), null=True, blank=True)
     valid_fat = FloatRangeField(_('Grasas válidas'), null=True, blank=True)
+    valid_fiber = FloatRangeField(_('Fibra válida'), null=True, blank=True)
     timezone = models.CharField(_('Timezone'),
                                 choices=[(tz, tz) for tz in pytz.all_timezones],
                                 max_length=255, default='UTC')
