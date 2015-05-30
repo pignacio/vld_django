@@ -21,17 +21,20 @@ from .models import Meal, MealPhoto
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
+def get_default_meal(person_name, date):
+    person = get_object_or_404(Person, name=person_name)
+    if isinstance(date, basestring):
+        date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
+    try:
+        return Meal.objects.get(person=person, date=date)
+    except Meal.DoesNotExist:
+        return Meal(person=person,
+                    date=date,
+                    data=person.default_meal_data)
+
 class MealViewMixin(LoginRequiredMixin):
     def get_object(self):
-        person = get_object_or_404(Person, name=self.kwargs['person_name'])
-        date = datetime.datetime.strptime(self.kwargs['date'],
-                                          '%Y-%m-%d').date()
-        try:
-            return Meal.objects.get(person=person, date=date)
-        except Meal.DoesNotExist:
-            return Meal(person=person,
-                        date=date,
-                        data=person.default_meal_data)
+        return get_default_meal(self.kwargs['person_name'], self.kwargs['date'])
 
     def get_context_data(self, *args, **kwargs):
         res = super(MealViewMixin, self).get_context_data(*args, **kwargs)
@@ -131,15 +134,27 @@ def meal_toggle_free(_request, person_name, date):
 
 
 @csrf_exempt
-def meal_counter(request):
+def meal_counter(request, person_name, date, path):
     log = None
+    day_log = None
     form = MealEditSectionForm(data=request.POST,
                                instance=None,
                                ingredients=None)
     if form.is_valid():
+        ingredients = form.cleaned_data['ingredients']
+        meal = get_default_meal(person_name, date)
+        data = meal.data
+        path = [p for p in path.split('.') if p]
+        for key in path:
+            data = data.get(key, {})
+        data['__init__'] = ingredients
+
         log = process_meal_data(
             'TOTAL', {'__init__': form.cleaned_data['ingredients']})
-    return render(request, 'meals/meal_log.html', {'log': log, })
+
+        day_log = process_meal_data('DAY TOTAL', meal.data)._replace(parts=[log])
+
+        return render(request, 'meals/meal_log.html', {'log': day_log})
 
 
 class MealCreatePhotoView(LoginRequiredMixin, CreateView):

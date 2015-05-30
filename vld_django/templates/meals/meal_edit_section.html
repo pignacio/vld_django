@@ -108,7 +108,7 @@ $(document).ready(function() {
     $('#meal-counter-button').click(function(){
       $('#meal-counter').html('LOADING....');
       $.post(
-        "{% url "meals:counter" %}",
+        "{% url "meals:counter" meal.person.name meal.date path %}",
         {ingredients: $('#id_ingredients').val()},
         function(data) { $('#meal-counter').html(data)}
         );
