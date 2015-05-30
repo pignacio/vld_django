@@ -1,6 +1,6 @@
 {% load utils_tags %}
 <div
-  {% if title %}title="{{ title }}"{% endif %}
+  title="{{ title }}{% if not is_free and range %} ({{ range|range_string }}){% endif %}"
   class="meal-value{% if not is_free  %} meal-value-{{ value|range_class:range }}{% endif %}"
   >
   {{ value|floatformat:1 }} {{ unit }}

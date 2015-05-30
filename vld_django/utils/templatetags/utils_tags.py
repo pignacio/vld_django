@@ -61,3 +61,14 @@ def range_class(value, value_range, warning=10):
             status_id = max(status_id, 3)
 
     return _STATUSES[status_id]
+
+
+@register.filter
+def range_string(value_range):
+    if value_range is None:
+        return ''
+    lower, upper = value_range.lower, value_range.upper
+    if lower is None:
+        return '' if upper is None else "<{}".format(upper)
+    else:
+        return '>{}'.format(lower) if upper is None else "{}-{}".format(lower, upper)

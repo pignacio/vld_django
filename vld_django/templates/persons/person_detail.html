@@ -23,9 +23,9 @@
   <a href="{% url "meals:detail" person.name meal.date %}">
     <h4>{{ meal.date|date:'M j, Y' }}</h4>
     {% with nval=log.nutritional_value %}
-    {% include "meals/layout/meal_value.html" with value=nval.calories range=person.valid_calories is_free=meal.is_free unit="kCal" only %}
+    {% include "meals/layout/meal_value.html" with value=nval.calories range=person.valid_calories is_free=meal.is_free unit="kCal" title=_("Calorías") only %}
     <div class="meal-fiber">
-      {% include "meals/layout/meal_value.html" with value=nval.fiber range=person.valid_fiber is_free=meal.is_free unit=_("g fibra") only %}
+      {% include "meals/layout/meal_value.html" with value=nval.fiber range=person.valid_fiber is_free=meal.is_free unit=_("g fibra") title=_("Fibra") only %}
     </div>
     <table class="table text-center meal-table">
       <tbody>
