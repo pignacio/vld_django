@@ -18,10 +18,10 @@ def make_charts(person, date_start, date_end):
     meals = person.meal_set.filter(date__gte=date_start, date__lte=date_end)
     logs = {m.date.strftime('%F'): l for m, l in process_meals(meals)}
     for chart_definition in person.charts:
-        yield make_chart(chart_definition, date_start, date_end, person.values, logs)
+        yield make_chart(chart_definition, date_start, date_end, person, logs)
 
 
-def make_chart(chart_def, start, end, values, logs):
+def make_chart(chart_def, start, end, person, logs):
     options = {
         'width': 900,
         'height': 500,
@@ -37,12 +37,14 @@ def make_chart(chart_def, start, end, values, logs):
 
     for i, value_def in enumerate(chart_def['values']):
         axis = value_def['axis']
-        if not axis in vAxes:
+        if axis not in vAxes:
             vAxes.append(axis)
         index = vAxes.index(axis)
 
         options['vAxes'][index] = {'title': axis, }
         options['series'][i] = {'targetAxisIndex': index}
+        if value_def['value'].startswith(_LIMIT_VALUE_PREFIX):
+            options['series'][i]['lineDashStyle'] = [5, 3]
         columns.append(('number', value_def['value']))
 
     rows = []
@@ -51,17 +53,39 @@ def make_chart(chart_def, start, end, values, logs):
         date_str = date.strftime('%F')
         row = [date_str]
         for value_def in chart_def['values']:
-            value_name = value_def['value']
-            if value_name.startswith('meal:'):
-                attr = value_name[5:]
-                try:
-                    value = getattr(logs[date_str].nutritional_value, attr)
-                except KeyError:
-                    value = None
-            else:
-                value = values.get(value_name, {}).get(date_str, None)
+            try:
+                value = _get_value(value_def['value'], date_str, person, logs.get(date_str, None))
+            except Exception:  # pylint: disable=broad-except
+                logger.debug("Problems extracting value for '%s'@%s", value_def, date_str,
+                             exc_info=True)
+                value = None
+
             row.append(round(value, 1) if value else value)
         rows.append(row)
         date += datetime.timedelta(days=1)
 
     return Chart(columns, rows, options)
+
+
+def _get_value(value_name, date_str, person, meal_log):
+    if value_name.startswith(_MEAL_VALUE_PREFIX):
+        return _get_meal_value(value_name[len(_MEAL_VALUE_PREFIX):], meal_log)
+    elif value_name.startswith(_LIMIT_VALUE_PREFIX):
+        return _get_limit_value(value_name[len(_LIMIT_VALUE_PREFIX):], person)
+    else:
+        return person.values.get(value_name, {}).get(date_str, None)
+
+
+def _get_meal_value(attr, log):
+    return getattr(log.nutritional_value, attr) if log else None
+
+
+def _get_limit_value(limit_def, person):
+    name, limit = limit_def.split(':', 1)
+    attr = 'valid_' + name
+    limit_range = getattr(person, attr)
+    return getattr(limit_range, limit) if limit_range else None
+
+
+_LIMIT_VALUE_PREFIX = 'limit:'
+_MEAL_VALUE_PREFIX = 'meal:'
