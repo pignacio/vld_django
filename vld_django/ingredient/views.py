@@ -6,14 +6,16 @@ from __future__ import absolute_import, unicode_literals, division
 import logging
 
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, CreateView, DetailView, FormView
 
 from vld.objects import Ingredient as VldIngredient
 
 from utils.views import LoginRequiredMixin
-from .forms import (IngredientForm, IngredientImportForm,
-                    IngredientMassImportForm)
+from .forms import (IngredientForm, IngredientImportForm, IngredientMassImportForm,
+                    IngredientCounterForm)
+from .helper import process_ingredients
 from .models import Ingredient
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -61,3 +63,13 @@ class IngredientMassImportView(LoginRequiredMixin, FormView):
             except Exception:
                 logger.exception('Error importing ingredient from %s', data)
         return redirect('ingredient:list')
+
+
+@csrf_exempt
+def ingredient_counter(request):
+    log = None
+    form = IngredientCounterForm(data=request.POST)
+
+    if form.is_valid():
+        log = process_ingredients(form.cleaned_data['ingredients'])
+        return render(request, 'meals/meal_log.html', {'log': log})

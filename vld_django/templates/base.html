@@ -46,6 +46,9 @@ body {
         <li class="{% active_namespace request "ingredient" %}">
         <a href="{% url "ingredient:list" %}">{% trans "Ingredientes" %}</a>
         </li>
+        <li class="{% active_namespace request "recipes" %}">
+        <a href="{% url "recipes:list" %}">{% trans "Recetas" %}</a>
+        </li>
         <li class="{% active_namespace request "persons" %}">
         <a href="{% url "persons:list" %}">{% trans "Personas" %}</a>
         </li>
