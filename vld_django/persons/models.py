@@ -28,6 +28,8 @@ class Person(models.Model):
     timezone = models.CharField(_('Timezone'),
                                 choices=[(tz, tz) for tz in pytz.all_timezones],
                                 max_length=255, default='UTC')
+    values = JSONField(_('Valores'), default={})
+    charts = JSONField(_('Gráficos'), default=[])
 
     updated_at = models.DateTimeField(auto_now=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
