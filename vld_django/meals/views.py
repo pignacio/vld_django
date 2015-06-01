@@ -12,10 +12,11 @@ from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, UpdateView
 
+from ingredient.helper import get_ingredients_data
 from utils.views import LoginRequiredMixin
 from persons.models import Person
 from .forms import MealCreateForm, MealAddSectionForm, MealEditSectionForm, MealPhotoCreateForm
-from .helper import process_meal_data, get_ingredients_data
+from .helper import process_meal_data
 from .models import Meal, MealPhoto
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name

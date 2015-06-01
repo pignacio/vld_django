@@ -11,10 +11,12 @@ from . import views
 
 logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
+
 urlpatterns = patterns(  # pylint: disable=invalid-name
     'ingredient.views',
     url(r'^list$', views.IngredientListView.as_view(), name='list'),
     url(r'^create$', views.IngredientCreateView.as_view(), name='create'),
     url(r'^import$', views.IngredientMassImportView.as_view(), name='import'),
     url(r'^detail/(?P<ingredient_id>\d+)$', views.IngredientDetailView.as_view(), name='detail'),
+    url(r'^counter$', views.ingredient_counter, name='counter'),
 )  # yapf: disable

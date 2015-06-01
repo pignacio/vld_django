@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_tags staticfiles %}
+
+{% block title %}{% trans "Agregar Ingrediente" %}{% endblock title %}
+{% block page_title %}{% trans "Agregar Ingrediente" %}{% endblock page_title %}
+
+{% block content %}
+{% crispy form %}
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/fuse.min.js'%}"></script>
+<script>
+var ingredients = {{ ingredients|safe }};
+var fuse = new Fuse(ingredients, {keys: ['name']})
+var results = [];
+var textarea = $('#id_ingredients')[0];
+
+function autocompleteIngredientFinder(event) {
+  if (event.which == 9) {
+    event.preventDefault();
+    if (results.length > 0) {
+      replaceCurrentTextareaLine(textarea, results[0].name);
+    }
+  }
+}
+
+function updateIngredientFinder(event) {
+  var results_div = $('#ingredient-finder-results');
+  results_div.empty();
+  var search =  getCurrentTextareaLine(textarea).split(',')[0];
+  if (search == '')
+    return;
+  results = fuse.search(search);
+  $.each(results, function() {
+      var item = $('<li>', {class: 'ingredient-finder-result', value: this.name});
+      item.append('<span class="ingredient-finder-result-name">' + this.name + '</span><br /><span class="ingredient-finder-result-units">{% trans "Unidades" %}: ' + this.units + '</span>')
+      results_div.append(item);
+      });
+
+  $('.ingredient-finder-result').click(function() {
+      replaceCurrentTextareaLine(textarea, $(this).attr('value'));
+      textarea.focus();
+      })
+}
+
+function getCurrentTextareaLine(textarea) {
+  var value = textarea.value;
+  var cursor = textarea.selectionStart;
+  var count = 0;
+  var index = cursor - 1;
+  while (index >= 0) {
+    if (value[index] == '\n')
+      count++;
+    index--;
+  }
+  return value.split('\n')[count];
+}
+
+function replaceCurrentTextareaLine(textarea, line) {
+  var value = textarea.value;
+  var cursor = textarea.selectionStart;
+  var count = 0;
+  var index = cursor - 1;
+  while (index >= 0) {
+    if (value[index] == '\n')
+      count++;
+    index--;
+  }
+  lines = value.split('\n');
+  line_split = lines[count].split(',');
+  line_split[0] = line;
+  if (line_split.length == 1)
+    line_split.push(' ');
+  lines[count] = line_split.join(',')
+    var position = 0;
+  for (i=0; i <= count; i++) {
+    position += lines[i].length + 1;
+  }
+  position -= 1; // Last newline
+  textarea.value = lines.join('\n');
+  textarea.selectionStart = textarea.selectionEnd = position;
+}
+
+$(document).ready(function() {
+    $('#id_ingredients').on('keyup', updateIngredientFinder);
+    $('#id_ingredients').on('keydown', autocompleteIngredientFinder);
+    $('#meal-counter-button').click(function(){
+      $('#meal-counter').html('LOADING....');
+      $.post(
+        "{% url "ingredient:counter" %}",
+        {ingredients: $('#id_ingredients').val()},
+        function(data) { $('#meal-counter').html(data)}
+        );
+      });
+    })
+</script>
+{% endblock extra_js %}
+{# vim: set ft=htmldjango :#}

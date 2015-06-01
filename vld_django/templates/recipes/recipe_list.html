@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Recetas" %}{% endblock title %}
+{% block page_title %}{% trans "Recetas" %}{% endblock page_title %}
+
+{% block page_buttons %}
+<a href="{% url "recipes:create" %}" title="{% trans "Agregar receta" %}"><span class="glyphicon glyphicon-plus icon-add"></span></a>
+{% endblock page_buttons %}
+
+{% block content %}
+
+{% if recipe_list %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>{% trans "Nombre" %}</th>
+      <th>{% trans "Cantidad" %}</th>
+      <th>{% trans "Unidad" %}</th>
+      <th>{% trans "Calorías" %}</th>
+      <th>{% trans "Carbs" %}</th>
+      <th>{% trans "Azúcar" %}</th>
+      <th>{% trans "Proteínas" %}</th>
+      <th>{% trans "Grasas" %}</th>
+      <th>{% trans "G. Saturadas" %}</th>
+      <th>{% trans "G. Trans" %}</th>
+      <th>{% trans "Fibra" %}</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for recipe in recipe_list %}
+  {% with recipe.as_object as vld_ingredient %}
+  <tr>
+    <td><a href="{% url "recipes:update" recipe.id %}">{{ recipe.name }}</a></td>
+    <td>{{ vld_ingredient.sample_size }}</td>
+    <td>{{ vld_ingredient.sample_unit }}</td>
+    <td>{{ vld_ingredient.sample_value.calories|floatformat:2|default:"???" }}</td>
+    <td>{{ vld_ingredient.sample_value.carbs|floatformat:2|default:"???" }}</td>
+    <td>{{ vld_ingredient.sample_value.sugar|floatformat:2|default:"???" }}</td>
+    <td>{{ vld_ingredient.sample_value.protein|floatformat:2|default:"???" }}</td>
+    <td>{{ vld_ingredient.sample_value.fat|floatformat:2|default:"???" }}</td>
+    <td>{{ vld_ingredient.sample_value.saturated_fat|floatformat:2|default:"???" }}</td>
+    <td>{{ vld_ingredient.sample_value.trans_fat|floatformat:2|default:"???" }}</td>
+    <td>{{ vld_ingredient.sample_value.fiber|floatformat:2|default:"???" }}</td>
+  </tr>
+  {% endwith %}
+  {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="jumbotron">{% trans "No hay recetas!" %}</div>
+{% endif %}
+{% endblock content %}
+
+{# vim: set ft=htmldjango :#}

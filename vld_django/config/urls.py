@@ -24,15 +24,18 @@ from django.views.generic import TemplateView
 import ingredient.urls
 import meals.urls
 import persons.urls
+import recipes.urls
 import web.urls
 
 urlpatterns = [
     url(r'^', include(web.urls, namespace='web')),
-    url(r'^files/', include('db_file_storage.urls')),
     url(r'^ingredient/', include(ingredient.urls, namespace='ingredient')),
-    url(r'^persons/', include(persons.urls, namespace='persons')),
     url(r'^meals/', include(meals.urls, namespace='meals')),
+    url(r'^persons/', include(persons.urls, namespace='persons')),
+    url(r'^recipes/', include(recipes.urls, namespace='recipes')),
+
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^files/', include('db_file_storage.urls')),
 ]  # yapf: disable
 
 if settings.DEBUG:

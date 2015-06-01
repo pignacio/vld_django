@@ -187,6 +187,7 @@ DJANGO_APPS = (
 LOCAL_APPS = (
     'utils',
     'ingredient',
+    'recipes',
     'persons',
     'meals',
 )

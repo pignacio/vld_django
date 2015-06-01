@@ -162,3 +162,12 @@ class IngredientMassImportForm(forms.Form):
             data = [data]
         return data
 
+
+class IngredientCounterForm(forms.Form):
+    ingredients = forms.CharField(widget=forms.Textarea(), required=False)
+
+    def clean_ingredients(self):
+        data = self.cleaned_data['ingredients']
+        if data:
+            return [l.strip() for l in data.split('\n')]
+        return data
