@@ -286,3 +286,8 @@ INSTALLED_APPS += ('db_file_storage',)
 DEFAULT_FILE_STORAGE = 'db_file_storage.storage.DatabaseFileStorage'
 ########## END DB FILE STORAGE CONFIGURATION
 
+########## CONVERSIONS CONFIGURATION
+from vld.constants import DEFAULT_CONVERSIONS
+
+DEFAULT_CONVERSIONS['paquete'] = {'p': 1}
+########## END CONVERSIONS CONFIGURATION
