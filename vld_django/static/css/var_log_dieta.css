@@ -1,11 +1,11 @@
 .log-level-0 {
-  background-color: #226622;
+  background-color: #5bc0de;
 }
 .log-level-1 {
-  background-color: #446622;
+  background-color: #df691a;
 }
 .log-level-2 {
-  background-color: #444422;
+  background-color: #4E5D6C;
 }
 .log-level-3 {
   background-color: #664422;
@@ -36,4 +36,12 @@
 .ingredient-finder-result:hover {
   background-color: coral;
   color: #2B3E50;
+}
+
+.meal-log th {
+  font-size: larger;
+}
+
+.meal-log td {
+  font-weight: bold;
 }
