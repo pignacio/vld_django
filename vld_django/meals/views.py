@@ -127,9 +127,10 @@ class MealEditSectionView(MealViewMixin, UpdateView):
 
 
 def meal_toggle_free(_request, person_name, date):
-    person = get_object_or_404(Person, name=person_name)
-    date = datetime.datetime.strptime(date, '%Y-%m-%d').date()
-    meal, _created = Meal.objects.get_or_create(person=person, date=date)
+    try:
+        meal = Meal.objects.get(person__name=person_name, date=date)
+    except Meal.DoesNotExist:
+        meal = get_default_meal(person_name, date)
     meal.is_free = not meal.is_free
     meal.save()
     return redirect(meal.get_absolute_url())
