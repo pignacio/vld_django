@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext as _
 
+from annoying.fields import AutoOneToOneField
 from jsonfield import JSONField
 import pytz
 
@@ -20,6 +21,7 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 class Person(models.Model):
     name = models.CharField(_('Nombre'), max_length=255, primary_key=True)
+    owner = models.OneToOneField('auth.User', null=True, blank=True)
     default_meal_data = JSONField(_('Comida por defecto'))
     valid_calories = FloatRangeField(_('Calorías válidas'), null=True, blank=True)
     valid_carbs = FloatRangeField(_('Carbs válidos'), null=True, blank=True)
@@ -77,3 +79,21 @@ class Person(models.Model):
         utc_now = pytz.utc.localize(now)
         tz_now = utc_now.astimezone(pytz.timezone(self.timezone))
         return tz_now.date()
+
+
+class UserProfile(models.Model):
+    user = AutoOneToOneField('auth.User', primary_key=True, related_name='profile')
+
+    updated_at = models.DateTimeField(auto_now=True, editable=False)
+    created_at = models.DateTimeField(auto_now_add=True, editable=False)
+
+    class Meta(object):  # pylint: disable=too-few-public-methods
+        db_table = 'user_profile'
+        verbose_name = 'user profile'
+        verbose_name_plural = 'user profiles'
+
+    def __unicode__(self):
+        return "Profile for {}".format(self.user)
+
+    def visible_persons(self):
+        return Person.objects.all()

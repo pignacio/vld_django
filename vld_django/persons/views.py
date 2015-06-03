@@ -25,6 +25,7 @@ class PersonCreateView(LoginRequiredMixin, CreateView):
     model = Person
     fields = (
         'name',
+        'owner',
         'timezone',
         'valid_calories',
         'valid_carbs',
