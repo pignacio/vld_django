@@ -61,12 +61,14 @@ class PersonUpdateForm(forms.ModelForm):
             'valid_fiber',
             'charts',
             'timezone',
+            'owner',
         )  # yapf: disable
 
     def __init__(self, *args, **kwargs):
         super(PersonUpdateForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
+            'owner',
             'timezone',
             'valid_calories',
             'valid_carbs',

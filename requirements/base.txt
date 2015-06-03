@@ -1,5 +1,6 @@
 Django==1.8.2
 Pillow==2.8.1
+-e git://github.com/skorokithakis/django-annoying@ebcb0870f9ba622596904fb9f097516963cd2c95#egg=django-annoying
 django-braces==1.8.0
 django-crispy-forms==1.4.0
 django-db-file-storage==0.2.9

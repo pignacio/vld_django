@@ -27,7 +27,7 @@ body {
 </head>
 
 <body>
-
+{% block _navbar %}
 <div class="navbar navbar-default navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
@@ -43,19 +43,54 @@ body {
         <li class="{% active_page request "home" %}">
         <a href="{% url "web:home" %}">Home</a>
         </li>
-        <li class="{% active_namespace request "ingredient" %}">
-        <a href="{% url "ingredient:list" %}">{% trans "Ingredientes" %}</a>
+        {% if user.person %}
+        <li class="dropdown">
+        <a href="{% url "persons:detail" user.person %}">
+          {% trans "Yo" %}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url "meals:today" user.person %}">{% trans "Comida de hoy" %}</a></li>
+          <li><a href="{% url "persons:values" user.person %}">{% trans "Estadísticas" %}</a></li>
+        </ul>
         </li>
-        <li class="{% active_namespace request "recipes" %}">
-        <a href="{% url "recipes:list" %}">{% trans "Recetas" %}</a>
+        {% endif %}
+        <li class="dropdown {% active_namespace request "ingredient" %}">
+        <a href="{% url "ingredient:list" %}">
+          {% trans "Ingredientes" %}<span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url "ingredient:create" %}">{% trans "Nuevo ingrediente" %}</a></li>
+          <li><a href="{% url "ingredient:import" %}">{% trans "Importar" %}</a></li>
+        </ul>
         </li>
-        <li class="{% active_namespace request "persons" %}">
-        <a href="{% url "persons:list" %}">{% trans "Personas" %}</a>
+        <li class="dropdown {% active_namespace request "recipes" %}">
+        <a href="{% url "recipes:list" %}">
+          {% trans "Recetas" %}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url "recipes:create" %}">{% trans "Nueva receta" %}</a></li>
+        </ul>
+        </li>
+        <li class="dropdown {% active_namespace request "persons" %}">
+        <a href="{% url "persons:list" %}">
+          {% trans "Personas" %}
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="{% url "persons:create" %}">{% trans "Agregar persona" %}</a></li>
+          <li class="divider"></li>
+          {% for person in user.profile.visible_persons %}
+          <li><a href="{% url "persons:detail" person %}">{{ person.name }}</a></li>
+          {% endfor %}
+        </ul>
         </li>
       </ul>
     </div><!--/.nav-collapse -->
   </div>
 </div>
+{% endblock _navbar %}
 
 <div class="container">
   {% block _content %}

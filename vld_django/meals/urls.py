@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)  # pylint: disable=invalid-name
 urlpatterns = patterns(  # pylint: disable=invalid-name
     'meals.views',
     url(r'^(?P<person_name>\w+)/create$', views.MealCreateView.as_view(), name='create'),
+    url(r'^(?P<person_name>\w+)/today$', views.MealTodayView.as_view(), name='today'),
     url(r'^(?P<person_name>\w+)/(?P<date>\d{4}-\d{2}-\d{2})$', views.MealDetailView.as_view(), name='detail'),
     url(r'^(?P<person_name>\w+)/(?P<date>\d{4}-\d{2}-\d{2})/add/(?P<path>.*)$', views.MealAddSectionView.as_view(), name='add_section'),
     url(r'^(?P<person_name>\w+)/(?P<date>\d{4}-\d{2}-\d{2})/edit/(?P<path>.*)$', views.MealEditSectionView.as_view(), name='edit_section'),

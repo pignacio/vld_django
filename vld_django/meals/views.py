@@ -10,7 +10,7 @@ import logging
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.urlresolvers import reverse
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import DetailView, CreateView, UpdateView
+from django.views.generic import DetailView, CreateView, UpdateView, RedirectView
 
 from ingredient.helper import get_ingredients_data
 from utils.views import LoginRequiredMixin
@@ -32,6 +32,7 @@ def get_default_meal(person_name, date):
         return Meal(person=person,
                     date=date,
                     data=person.default_meal_data)
+
 
 class MealViewMixin(LoginRequiredMixin):
     def get_object(self):
@@ -176,3 +177,14 @@ class MealCreatePhotoView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         return self.object.meal.get_absolute_url()
+
+
+class MealTodayView(LoginRequiredMixin, RedirectView):
+    permanent = False
+    query_string = True
+    pattern_name = 'meals:detail'
+
+    def get_redirect_url(self, *args, **kwargs):
+        person = get_object_or_404(Person, name=kwargs['person_name'])
+        return super(MealTodayView, self).get_redirect_url(*args,
+                                                           date=person.today_date(), **kwargs)
