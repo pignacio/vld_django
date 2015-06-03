@@ -1,8 +1,10 @@
 {% load utils_tags %}
+{% with class_=class|default_if_none:"" %}
 <div
   title="{{ title }}{% if not is_free and range %} ({{ range|range_string }}){% endif %}"
-  class="meal-value{% if not is_free  %} meal-value-{{ value|range_class:range }}{% endif %}"
+  class="{{ class_ }} meal-value{% if not is_free  %} meal-value-{{ value|range_class:range }}{% endif %}"
   >
   {{ value|floatformat:1 }} {{ unit }}
 </div>
+{% endwith %}
 {# vim: set ft=htmldjango :#}
