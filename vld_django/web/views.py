@@ -22,7 +22,7 @@ def login(request):
             auth.login(request, form.cleaned_data['user'])
             return redirect(form.cleaned_data['next'])
     else:
-        initial = {'next': request.GET.get('next', 'home')}
+        initial = {'next': request.GET.get('next', 'web:home')}
         form = LoginForm(initial=initial)
 
     return render(request, 'web/login.html', {'form': form})
