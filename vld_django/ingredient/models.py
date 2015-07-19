@@ -37,7 +37,7 @@ class Ingredient(models.Model):
         self.save()
 
     def get_absolute_url(self):
-        return reverse('ingredient:detail', kwargs={'ingredient_id': self.id})
+        return reverse('ingredient:update', kwargs={'ingredient_id': self.id})
 
     def __unicode__(self):
         return self.name

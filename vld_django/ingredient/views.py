@@ -6,13 +6,14 @@ from __future__ import absolute_import, unicode_literals, division
 import logging
 
 from django.core.urlresolvers import reverse_lazy
+from django.utils.translation import ugettext as _
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, CreateView, DetailView, FormView
+from django.views.generic import ListView, CreateView, UpdateView, FormView
 
 from vld.objects import Ingredient as VldIngredient
 
-from utils.views import LoginRequiredMixin
+from utils.views import LoginRequiredMixin, SimpleFormViewMixin
 from .forms import (IngredientForm, IngredientImportForm, IngredientMassImportForm,
                     IngredientCounterForm)
 from .helper import process_ingredients
@@ -41,9 +42,12 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('ingredient:list')
 
 
-class IngredientDetailView(LoginRequiredMixin, DetailView):
+class IngredientUpdateView(LoginRequiredMixin, SimpleFormViewMixin, UpdateView):
     model = Ingredient
+    form_class = IngredientForm
     pk_url_kwarg = 'ingredient_id'
+    page_title = _('Editar ingrediente')
+    success_url = reverse_lazy('ingredient:list')
 
 
 class IngredientMassImportView(LoginRequiredMixin, FormView):
