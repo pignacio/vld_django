@@ -32,7 +32,7 @@
   {% for ingredient in ingredient_list %}
   {% with ingredient.as_object as vld_ingredient %}
   <tr>
-    <td><a href="{% url "ingredient:detail" ingredient.id %}">{{ ingredient.name }}</a></td>
+    <td><a href="{% url "ingredient:update" ingredient.id %}">{{ ingredient.name }}</a></td>
     <td>{{ vld_ingredient.sample_size }}</td>
     <td>{{ vld_ingredient.sample_unit }}</td>
     <td>{{ vld_ingredient.sample_value.calories|floatformat:2|default:"???" }}</td>

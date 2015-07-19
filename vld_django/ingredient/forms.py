@@ -52,6 +52,12 @@ class IngredientForm(forms.ModelForm):
     categories = forms.CharField(label=_('Categorías'), required=False)
 
     def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        if instance:
+            initial = kwargs.setdefault('initial', {})
+            initial.update(instance.data['sample_value'])
+            initial['conversions'] = json.dumps(instance.data['conversions'])
+            initial['categories'] = ",".join(instance.data['categories'])
         res = super(IngredientForm, self).__init__(*args, **kwargs)
         for field_name in _FLOAT_FIELDS:
             self.fields[field_name].widget.attrs['step'] = 0.01
@@ -70,16 +76,10 @@ class IngredientForm(forms.ModelForm):
             'fiber',
             'conversions',
             'categories',
-            FormActions(Submit('submit', _('Agregar'),
+            FormActions(Submit('submit', _('Guardar'),
                                css_class='btn-primary pull-right',
-                               data_loading_text=_('Agregando...')), )
+                               data_loading_text=_('Guardando...')), )
         )  # yapf: disable
-
-    def clean_name(self):
-        if Ingredient.objects.filter(name=self.cleaned_data['name']).exists():
-            raise forms.ValidationError(
-                _('Ya hay un ingrediente con ese nombre.'))
-        return self.cleaned_data['name']
 
     def clean_conversions(self):
         try:
