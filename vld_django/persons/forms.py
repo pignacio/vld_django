@@ -138,15 +138,18 @@ class PersonAddValuesForm(forms.Form):
         super(PersonAddValuesForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_show_labels = False
-        self.helper.layout = Layout(HTML('<table class="table"><thead><tr><th>Fecha</th>'))
+        self.helper.layout = Layout(HTML('<table class="table"><thead><tr><th>Valor</th>'))
 
-        for field in instance.values:
-            self.helper.layout.append(HTML('<th>{}</th>'.format(field)))
+        date = self.date_start
+        fields = []
+        while date <= self.date_end:
+            self.helper.layout.append(HTML('<th>{}</th>'.format(date.strftime('%F'))))
+            date += datetime.timedelta(days=1)
 
         self.helper.layout.append(HTML("</tr></thead><tbody>"))
 
-        for date, fields in fields_by_date:
-            self.helper.layout.append(HTML("<tr><td>{}</td>".format(date)))
+        for value, fields in fields_by_date:
+            self.helper.layout.append(HTML("<tr><td>{}</td>".format(value)))
             for field in fields:
                 self.fields[field['field_name']] = forms.FloatField(initial=field['initial'],
                                                                     required=False)
@@ -161,20 +164,22 @@ class PersonAddValuesForm(forms.Form):
                                                      data_loading_text=_('Guardando...')), ))
 
     def _generate_fields(self):
-        fields_by_date = []
-        date = self.date_start
-        while date <= self.date_end:
+        values_by_fields = []
+        for value, values in sorted(self.instance.values.items()):
+            date = self.date_start
             fields = []
-            date_str = date.strftime('%F')
-            for value, values in self.instance.values.items():
+            while date <= self.date_end:
+                date_str = date.strftime('%F')
                 fields.append({
                     'initial': values.get(date_str, None),
                     'field_name': "{}_{}".format(value, date_str),
-                    'value': value
+                    'value': value,
+                    'date': date_str
                 })
-            fields_by_date.append((date_str, fields))
-            date += datetime.timedelta(days=1)
-        return fields_by_date
+                date += datetime.timedelta(days=1)
+            values_by_fields.append((value, fields))
+
+        return values_by_fields
 
     @staticmethod
     def _get_initial(fields_by_date):
@@ -184,6 +189,6 @@ class PersonAddValuesForm(forms.Form):
                 initial[field['field_name']] = field['initial']
 
     def get_date_value_field_triplets(self):
-        for date, fields in self._generate_fields():
+        for _value, fields in self._generate_fields():
             for field in fields:
-                yield date, field['value'], field['field_name']
+                yield field['date'], field['value'], field['field_name']
