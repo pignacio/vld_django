@@ -25,6 +25,7 @@ def make_chart(chart_def, start, end, person, logs):
     options = {
         'width': 900,
         'height': 500,
+        'interpolateNulls': True,
         'vAxes': {
         },
         'series': {
