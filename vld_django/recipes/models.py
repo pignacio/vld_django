@@ -30,6 +30,8 @@ class Recipe(models.Model):
         verbose_name = 'recipe'
         verbose_name_plural = 'recipes'
 
+        ordering = ('name', )
+
     def as_object(self):
         return VldIngredient.from_json(self.data)
 
