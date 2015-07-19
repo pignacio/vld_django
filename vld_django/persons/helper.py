@@ -25,6 +25,7 @@ def make_chart(chart_def, start, end, person, logs):
     options = {
         'width': 900,
         'height': 500,
+        'interpolateNulls': True,
         'vAxes': {
         },
         'series': {
@@ -77,7 +78,7 @@ def _get_value(value_name, date_str, person, meal_log):
 
 
 def _get_meal_value(attr, log):
-    return getattr(log.nutritional_value, attr) if log else None
+    return getattr(log.nutritional_value, attr) if log else 0
 
 
 def _get_limit_value(limit_def, person):
