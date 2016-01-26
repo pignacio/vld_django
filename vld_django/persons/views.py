@@ -86,7 +86,10 @@ class PersonValuesView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         res = super(PersonValuesView, self).get_context_data(*args, **kwargs)
-        start = self.object.meal_set.order_by('date')[0].date
+        try:
+            start = datetime.datetime.strptime(self.request.GET['start'], '%Y-%m-%d').date()
+        except (KeyError, ValueError):
+            start = self.object.meal_set.order_by('date')[0].date
         end = datetime.date.today()
         res['charts'] = [c._replace(options=json.dumps(c.options),
                                     rows=json.dumps(c.rows))
