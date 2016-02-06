@@ -73,6 +73,8 @@ def _get_value(value_name, date_str, person, meal_log):
         return _get_meal_value(value_name[len(_MEAL_VALUE_PREFIX):], meal_log)
     elif value_name.startswith(_LIMIT_VALUE_PREFIX):
         return _get_limit_value(value_name[len(_LIMIT_VALUE_PREFIX):], person)
+    elif value_name.startswith(_DIFF_VALUE_PREFIX):
+        return _get_diff_value(value_name[len(_DIFF_VALUE_PREFIX):], date_str, person)
     else:
         return person.values.get(value_name, {}).get(date_str, None)
 
@@ -88,5 +90,28 @@ def _get_limit_value(limit_def, person):
     return getattr(limit_range, limit) if limit_range else None
 
 
+def _get_diff_value(diff_def, date_str, person):
+    value_name, diff = diff_def.split(":", 1)
+    diff = int(diff)
+    values = person.values.get(value_name, {})
+    try:
+        current = values[date_str]
+    except KeyError:
+        return None
+
+    cur_date = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+    for delta in [0, 1, -1]:
+        date = cur_date - datetime.timedelta(days=delta + diff)
+        try:
+            date_value = values[date.strftime("%F")]
+        except KeyError:
+            pass
+        else:
+            return current - date_value
+
+    return None
+
+
 _LIMIT_VALUE_PREFIX = 'limit:'
 _MEAL_VALUE_PREFIX = 'meal:'
+_DIFF_VALUE_PREFIX = 'diff:'
